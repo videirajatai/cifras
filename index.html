@@ -96,16 +96,16 @@
     
     <div class="form-group">
       <label>Nome do Artista / Banda</label>
-      <input type="text" id="novo-artista" placeholder="Ex: Morada">
+      <input type="text" id="novo-artista" placeholder="Ex: Felipe Rodrigues">
     </div>
     
     <div class="form-group">
       <label>Nome da Música</label>
-      <input type="text" id="nova-musica" placeholder="Ex: É Tudo Sobre Você">
+      <input type="text" id="nova-musica" placeholder="Ex: Tudo é Perda">
     </div>
     
     <div class="form-group">
-      <label>Cole a Cifra Aqui (Formato CifraClub)</label>
+      <label>Cole a Cifra Aqui</label>
       <textarea id="novo-conteudo" placeholder="[A]\nQuando eu olho pra cruz..."></textarea>
     </div>
 
@@ -122,7 +122,7 @@
     let tamanhoFonteAtual = 16;
     let timerBusca;
 
-    // 1. FUNÇÃO DE BUSCA DIRETO NA API (Corrigida com o cabeçalho Authorization)
+    // 1. FUNÇÃO DE BUSCA DIRETO NA API (Corrigida: Acentos e Espaços)
     async function buscarNoSupabase() {
       const termo = document.getElementById('busca').value.trim();
       const lista = document.getElementById('resultados');
@@ -131,14 +131,18 @@
 
       clearTimeout(timerBusca);
       timerBusca = setTimeout(async () => {
-        const termoFormatado = termo.toLowerCase().replace(/ /g, '%');
-        const urlBusca = `${supabaseUrl}?select=id,artista,musica&busca=ilike.*${termoFormatado}*&limit=15`;
+        // Substitui espaços por asterisco (*) que é o curinga de busca no Supabase
+        const termoFormatado = termo.toLowerCase().replace(/\s+/g, '*');
+        
+        // A MÁGICA AQUI: O encodeURIComponent traduz os acentos para a web não bugar (ex: é vira %C3%A9)
+        const termoCodificado = encodeURIComponent(`*${termoFormatado}*`);
+        const urlBusca = `${supabaseUrl}?select=id,artista,musica&busca=ilike.${termoCodificado}&limit=15`;
 
         try {
           const response = await fetch(urlBusca, { 
             headers: { 
               'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}` // <- O crachá que faltava para evitar o erro de CORS
+              'Authorization': `Bearer ${supabaseKey}`
             } 
           });
           
@@ -164,7 +168,7 @@
       }, 300);
     }
 
-    // 2. CARREGAR CIFRA CLICADA (Corrigida com o cabeçalho Authorization)
+    // 2. CARREGAR CIFRA CLICADA
     async function carregarCifraPorId(id) {
       document.getElementById('resultados').style.display = 'none';
       document.getElementById('busca').value = '';
@@ -173,7 +177,7 @@
         const response = await fetch(`${supabaseUrl}?id=eq.${id}&select=artista,musica,conteudo_html`, { 
           headers: { 
             'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}` // <- O crachá que faltava aqui também
+            'Authorization': `Bearer ${supabaseKey}`
           } 
         });
         
@@ -204,6 +208,7 @@
         alert("Preencha todos os campos!"); return;
       }
 
+      // Adiciona a cifra na string de busca também, para achar por trechos da música
       const stringBusca = `${artista} ${musica} ${conteudo.substring(0, 200)}`.toLowerCase();
       const payload = {
         artista: artista,
@@ -241,7 +246,7 @@
     function mudarTamanhoFonte(passos) {
       tamanhoFonteAtual += passos;
       if (tamanhoFonteAtual < 10) tamanhoFonteAtual = 10;
-      if (tamanhoFonteAtual > 36) tamanhoFonteAtual = 36;
+      if (tamanhoFonteAtual > 40) tamanhoFonteAtual = 40; // Limite um pouco maior
       document.getElementById('cifra-display').style.fontSize = tamanhoFonteAtual + 'px';
     }
 
