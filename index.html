@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Videira Cifras - Sistema</title>
+  <title>Videira Cifras - Repertório</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,273 +11,440 @@
 
   <style>
     :root {
-      --bg-puro: #000000;
-      --bg-app: #121212;
-      --bg-surface: #1e1e1e;
-      --text-primary: #ffffff;
-      --text-secondary: #b3b3b3;
-      --accent: #bb86fc; 
-      --border: #333333;
+      --bg-puro: #000000; --bg-app: #121212; --bg-surface: #1e1e1e;
+      --text-primary: #ffffff; --text-secondary: #b3b3b3;
+      --accent: #bb86fc; --accent-hover: #9965f4; --border: #333333; --danger: #cf6679;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    
-    body { font-family: 'Roboto', sans-serif; background-color: var(--bg-app); color: var(--text-primary); margin: 0; padding: 0; padding-bottom: 20px; }
+    body { font-family: 'Roboto', sans-serif; background-color: var(--bg-app); color: var(--text-primary); margin: 0; padding: 0; padding-bottom: 70px; }
 
-    /* Barra Superior */
-    .header-fixo { position: sticky; top: 0; background-color: rgba(18, 18, 18, 0.95); backdrop-filter: blur(5px); padding: 10px 15px; border-bottom: 1px solid var(--border); z-index: 100; display: flex; gap: 10px; }
-    
-    .search-box { flex: 1; padding: 12px; font-size: 16px; background-color: var(--bg-surface); border: 1px solid var(--border); color: var(--text-primary); border-radius: 8px; }
-    .search-box:focus { outline: none; border-color: var(--accent); }
-
-    .btn-acao { background-color: var(--accent); color: var(--bg-puro); border: none; padding: 0 15px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 14px; }
-    .btn-acao:active { opacity: 0.8; }
+    /* Componentes Gerais */
+    .header-fixo { position: sticky; top: 0; background-color: rgba(18, 18, 18, 0.95); backdrop-filter: blur(5px); padding: 10px 15px; border-bottom: 1px solid var(--border); z-index: 100; display: flex; gap: 10px; align-items: center; }
+    .search-box, .input-padrao { flex: 1; padding: 12px; font-size: 16px; background-color: var(--bg-surface); border: 1px solid var(--border); color: white; border-radius: 8px; width: 100%;}
+    .btn-acao { background-color: var(--accent); color: var(--bg-puro); border: none; padding: 10px 15px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 14px; }
     .btn-voltar { background-color: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 8px 15px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; }
+    .btn-danger { background-color: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 
-    /* Resultados */
-    #resultados { list-style: none; padding: 0; margin: 0; position: absolute; top: 60px; left: 15px; width: calc(100% - 30px); max-height: 350px; overflow-y: auto; background-color: var(--bg-surface); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: none; z-index: 99; }
-    #resultados li { padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer; }
-    #resultados li:active { background-color: #2a2a2a; }
-    .nome-musica { font-weight: 700; display: block; }
+    /* Abas Inferiores (Bottom Navigation) */
+    .bottom-nav { position: fixed; bottom: 0; width: 100%; background-color: var(--bg-surface); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--border); z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.5); }
+    .nav-item { color: var(--text-secondary); text-align: center; font-size: 12px; cursor: pointer; flex: 1; padding: 5px; font-weight: bold; text-transform: uppercase; }
+    .nav-item.active { color: var(--accent); }
+
+    /* Containers */
+    .tab-content { display: none; padding: 15px; max-width: 800px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+    
+    /* Listas (Setlists) */
+    .lista-card { background: var(--bg-surface); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--border); cursor: pointer; display: flex; justify-content: space-between; align-items: center;}
+    .lista-card:active { background: #2a2a2a; }
+    .lista-titulo { font-weight: bold; font-size: 18px; display: block; margin-bottom: 5px; }
+    .lista-data { font-size: 12px; color: var(--text-secondary); }
+
+    /* Resultados e Itens de Lista */
+    .item-musica { padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .nome-musica { font-weight: 700; display: block; font-size: 16px;}
     .nome-artista { font-size: 14px; color: var(--text-secondary); }
 
-    /* Containers das Telas */
-    .main-container { padding: 15px; max-width: 800px; margin: 0 auto; }
-
-    /* Controles da Cifra (Tom e Fonte) */
+    /* Controles da Cifra */
     .cipher-controls { display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 10px; border-radius: 8px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;}
-    .control-group { display: flex; align-items: center; gap: 5px; }
-    .label-control { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; margin-right: 5px;}
     .btn-tom { background-color: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 6px 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; }
-    
-    /* Display da Cifra */
-    #cifra-display { font-family: 'Courier New', Courier, monospace; font-size: 16px; line-height: 1.4; white-space: pre-wrap; background-color: transparent; padding: 5px 0; overflow-x: auto; }
+    #cifra-display { font-family: 'Courier New', Courier, monospace; font-size: 16px; line-height: 1.4; white-space: pre-wrap; overflow-x: auto; padding-bottom: 80px; }
 
-    /* Formulário de Adicionar */
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; color: var(--text-secondary); font-size: 14px; }
-    .form-group input, .form-group textarea { width: 100%; padding: 12px; background: var(--bg-surface); border: 1px solid var(--border); color: white; border-radius: 6px; font-family: inherit; font-size: 16px; }
-    .form-group textarea { font-family: 'Courier New', Courier, monospace; resize: vertical; min-height: 250px; white-space: pre; }
+    /* Rolagem Automática (Flutuante) */
+    .auto-scroll-bar { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); background: rgba(30,30,30,0.9); backdrop-filter: blur(5px); border: 1px solid var(--accent); padding: 8px 15px; border-radius: 30px; display: flex; gap: 15px; align-items: center; z-index: 999; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    .btn-scroll { background: transparent; color: var(--text-primary); border: none; font-size: 18px; font-weight: bold; cursor: pointer; }
+    .btn-scroll.play { color: var(--accent); }
+
+    /* Modal de Adicionar à Lista */
+    #modal-add-lista { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px;}
+    .modal-content { background: var(--bg-surface); padding: 20px; border-radius: 10px; width: 100%; max-width: 400px; }
   </style>
 </head>
 <body>
 
-  <div class="header-fixo">
-    <input type="text" id="busca" class="search-box" placeholder="Pesquisar cifra no banco..." onkeyup="buscarNoSupabase()" autocomplete="off">
-    <button class="btn-acao" onclick="abrirTelaAdicionar()">+ NOVA</button>
+  <div class="bottom-nav">
+    <div class="nav-item active" id="nav-busca" onclick="mudarAba('busca')">🔍 Busca</div>
+    <div class="nav-item" id="nav-listas" onclick="mudarAba('listas')">📋 Listas</div>
+    <div class="nav-item" id="nav-historico" onclick="mudarAba('historico')">🕰️ Histórico</div>
   </div>
-  <ul id="resultados"></ul>
 
-  <div id="tela-cifra" class="main-container" style="display: none;">
-    <button class="btn-voltar" onclick="fecharCifra()">← Voltar</button>
+  <div id="aba-busca" class="tab-content active">
+    <div class="header-fixo" style="margin: -15px -15px 15px -15px;">
+      <input type="text" id="busca-input" class="search-box" placeholder="Pesquisar cifra no banco..." onkeyup="buscarNoSupabase()">
+    </div>
+    <div id="resultados-busca">
+      <p style="color: var(--text-secondary); text-align: center; margin-top: 50px;">Digite acima para buscar cifras.<br><br>Ou se quiser cadastrar uma nova:<br><br><button class="btn-acao" onclick="mudarAba('nova-cifra')">+ ADICIONAR NOVA CIFRA</button></p>
+    </div>
+  </div>
+
+  <div id="aba-listas" class="tab-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="margin: 0;">Repertórios</h2>
+      <button class="btn-acao" onclick="document.getElementById('form-nova-lista').style.display='block'">+ NOVA LISTA</button>
+    </div>
+    
+    <div id="form-nova-lista" style="display: none; background: var(--bg-surface); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border);">
+      <input type="text" id="nl-nome" class="input-padrao" placeholder="Nome (Ex: Culto Domingo)" style="margin-bottom: 10px;">
+      <input type="date" id="nl-data" class="input-padrao" style="margin-bottom: 10px;">
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-acao" onclick="criarLista()">Salvar</button>
+        <button class="btn-voltar" style="margin:0;" onclick="document.getElementById('form-nova-lista').style.display='none'">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="container-listas-ativas">Carregando listas...</div>
+  </div>
+
+  <div id="aba-historico" class="tab-content">
+    <h2>Listas Arquivadas</h2>
+    <div id="container-listas-arquivadas">Carregando histórico...</div>
+  </div>
+
+  <div id="aba-ver-lista" class="tab-content">
+    <button class="btn-voltar" onclick="mudarAba('listas')">← Voltar às Listas</button>
+    <div style="display: flex; justify-content: space-between; align-items: start;">
+      <div>
+        <h2 id="vl-nome" style="margin: 0 0 5px 0;">Nome da Lista</h2>
+        <p id="vl-data" style="margin: 0 0 20px 0; color: var(--text-secondary);"></p>
+      </div>
+      <button class="btn-danger" id="vl-btn-arquivar" onclick="arquivarListaAtual()">Arquivar</button>
+    </div>
+    <div id="vl-cifras">Carregando músicas...</div>
+    <div style="text-align: center; margin-top: 20px;">
+      <button class="btn-acao" style="background: transparent; border: 1px dashed var(--accent); color: var(--accent);" onclick="mudarAba('busca')">+ Adicionar Músicas (Vá para Busca)</button>
+    </div>
+  </div>
+
+  <div id="aba-cifra" class="tab-content">
+    <div style="display: flex; justify-content: space-between;">
+      <button class="btn-voltar" onclick="voltarParaAnterior()">← Voltar</button>
+      <button class="btn-acao" onclick="abrirModalAddLista()" style="margin-bottom: 15px;">📋 Add à Lista</button>
+    </div>
     
     <h2 id="titulo-musica" style="margin:0 0 5px 0;"></h2>
-    <p id="nome-artista-view" style="margin:0 0 20px 0; color: #b3b3b3;"></p>
+    <p id="nome-artista-view" style="margin:0 0 15px 0; color: var(--text-secondary);"></p>
 
     <div class="cipher-controls">
-      <div class="control-group">
-        <span class="label-control">Tom</span>
-        <button class="btn-tom" onclick="mudarTom(-1)">- ½</button>
-        <button class="btn-tom" onclick="mudarTom(1)">+ ½</button>
+      <div><span style="font-size:12px; color:var(--text-secondary);">TOM</span><br>
+        <button class="btn-tom" onclick="mudarTom(-1)">-</button>
+        <button class="btn-tom" onclick="mudarTom(1)">+</button>
       </div>
-      <div class="control-group">
-        <span class="label-control">Letra</span>
+      <div><span style="font-size:12px; color:var(--text-secondary);">LETRA</span><br>
         <button class="btn-tom" onclick="mudarTamanhoFonte(-2)">A-</button>
         <button class="btn-tom" onclick="mudarTamanhoFonte(2)">A+</button>
       </div>
     </div>
 
     <div id="cifra-display"></div>
+
+    <div class="auto-scroll-bar" id="scroll-bar" style="display: none;">
+      <button class="btn-scroll" onclick="alterarVelocidadeScroll(10)">🐢</button>
+      <button class="btn-scroll play" id="btn-play-scroll" onclick="toggleScroll()">▶ PLAY</button>
+      <button class="btn-scroll" onclick="alterarVelocidadeScroll(-10)">🐇</button>
+    </div>
   </div>
 
-  <div id="tela-adicionar" class="main-container" style="display: none;">
-    <button class="btn-voltar" onclick="fecharAdicionar()">← Cancelar</button>
-    <h2>Adicionar Nova Cifra</h2>
-    
-    <div class="form-group">
-      <label>Nome do Artista / Banda</label>
-      <input type="text" id="novo-artista" placeholder="Ex: Felipe Rodrigues">
-    </div>
-    
-    <div class="form-group">
-      <label>Nome da Música</label>
-      <input type="text" id="nova-musica" placeholder="Ex: Tudo é Perda">
-    </div>
-    
-    <div class="form-group">
-      <label>Cole a Cifra Aqui</label>
-      <textarea id="novo-conteudo" placeholder="[A]\nQuando eu olho pra cruz..."></textarea>
-    </div>
+  <div id="aba-nova-cifra" class="tab-content">
+    <button class="btn-voltar" onclick="mudarAba('busca')">← Cancelar</button>
+    <h2>Cadastrar Cifra Manual</h2>
+    <input type="text" id="nc-artista" class="input-padrao" placeholder="Artista" style="margin-bottom: 10px;">
+    <input type="text" id="nc-musica" class="input-padrao" placeholder="Música" style="margin-bottom: 10px;">
+    <textarea id="nc-conteudo" class="input-padrao" placeholder="Cole a cifra aqui..." style="min-height: 250px; font-family: monospace; margin-bottom: 15px; white-space: pre;"></textarea>
+    <button class="btn-acao" style="width: 100%;" onclick="salvarNovaCifra()">Salvar Cifra no Banco</button>
+  </div>
 
-    <button class="btn-acao" style="width: 100%; padding: 15px; font-size: 16px;" onclick="salvarNovaCifra()">Salvar no Banco de Dados</button>
+  <div id="modal-add-lista">
+    <div class="modal-content">
+      <h3 style="margin-top: 0;">Adicionar ao Repertório</h3>
+      <div id="ml-opcoes">Carregando listas...</div>
+      <button class="btn-voltar" style="width: 100%; margin-top: 15px;" onclick="document.getElementById('modal-add-lista').style.display='none'">Cancelar</button>
+    </div>
   </div>
 
   <script>
-    // Configurações do seu Supabase
-    const supabaseUrl = 'https://ryvfogmfpjyamgqsltks.supabase.co/rest/v1/cifras';
+    // --- CONFIGURAÇÕES SUPABASE ---
+    const supabaseUrl = 'https://ryvfogmfpjyamgqsltks.supabase.co/rest/v1';
     const supabaseKey = 'sb_publishable_nFMOC-fPkJnsmf5_noOTBg_tKV6Cr1q';
-    
-    const escala = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-    const conversorBemol = {'Db': 'C#', 'Eb': 'D#', 'Gb': 'F#', 'Ab': 'G#', 'Bb': 'A#'};
-    let tamanhoFonteAtual = 16;
-    let timerBusca;
+    const headers = { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' };
 
-    // 1. FUNÇÃO DE BUSCA DIRETO NA API (Corrigida: Acentos e Espaços)
-    async function buscarNoSupabase() {
-      const termo = document.getElementById('busca').value.trim();
-      const lista = document.getElementById('resultados');
+    let abaAnterior = 'busca';
+    let cifraAtualId = null;
+    let listaAtualId = null;
+
+    // --- NAVEGAÇÃO E ABAS ---
+    function mudarAba(abaId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
       
-      if (termo.length < 2) { lista.style.display = 'none'; return; }
+      const tabElement = document.getElementById(`aba-${abaId}`);
+      if(tabElement) tabElement.classList.add('active');
+      
+      const navElement = document.getElementById(`nav-${abaId}`);
+      if(navElement) navElement.classList.add('active');
+
+      pararScroll(); // Para o auto-scroll ao sair da cifra
+      
+      if(abaId === 'listas') carregarListas(false);
+      if(abaId === 'historico') carregarListas(true);
+      if(abaId !== 'cifra' && abaId !== 'ver-lista') abaAnterior = abaId;
+    }
+
+    function voltarParaAnterior() { mudarAba(abaAnterior); }
+
+    // --- BUSCA DE CIFRAS ---
+    let timerBusca;
+    async function buscarNoSupabase() {
+      const termo = document.getElementById('busca-input').value.trim();
+      const divRes = document.getElementById('resultados-busca');
+      
+      if (termo.length < 2) return;
 
       clearTimeout(timerBusca);
       timerBusca = setTimeout(async () => {
-        // Substitui espaços por asterisco (*) que é o curinga de busca no Supabase
-        const termoFormatado = termo.toLowerCase().replace(/\s+/g, '*');
-        
-        // A MÁGICA AQUI: O encodeURIComponent traduz os acentos para a web não bugar (ex: é vira %C3%A9)
-        const termoCodificado = encodeURIComponent(`*${termoFormatado}*`);
-        const urlBusca = `${supabaseUrl}?select=id,artista,musica&busca=ilike.${termoCodificado}&limit=15`;
-
+        const termoFormatado = encodeURIComponent(`*${termo.toLowerCase().replace(/\s+/g, '*')}*`);
         try {
-          const response = await fetch(urlBusca, { 
-            headers: { 
-              'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}`
-            } 
+          const res = await fetch(`${supabaseUrl}/cifras?select=id,artista,musica&busca=ilike.${termoFormatado}&limit=20`, { headers });
+          const dados = await res.json();
+          divRes.innerHTML = '';
+          dados.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'item-musica';
+            div.innerHTML = `<div><span class="nome-musica">${item.musica.replace(/-/g, ' ')}</span><span class="nome-artista">${item.artista.replace(/-/g, ' ')}</span></div>`;
+            div.onclick = () => carregarCifraPorId(item.id);
+            divRes.appendChild(div);
           });
-          
-          if (!response.ok) throw new Error("Erro na resposta do Supabase");
-          
-          const resultados = await response.json();
-
-          lista.innerHTML = '';
-          if (resultados.length > 0) {
-            resultados.forEach(item => {
-              const li = document.createElement('li');
-              li.innerHTML = `<span class="nome-musica">${item.musica.replace(/-/g, ' ')}</span><span class="nome-artista">${item.artista.replace(/-/g, ' ')}</span>`;
-              li.onclick = () => carregarCifraPorId(item.id);
-              lista.appendChild(li);
-            });
-          } else {
-            lista.innerHTML = '<li style="color:#888;">Nenhuma música encontrada.</li>';
-          }
-          lista.style.display = 'block';
-        } catch (e) {
-          console.error("Erro na busca", e);
-        }
+        } catch (e) { console.error(e); }
       }, 300);
     }
 
-    // 2. CARREGAR CIFRA CLICADA
+    // --- CARREGAR CIFRA ---
     async function carregarCifraPorId(id) {
-      document.getElementById('resultados').style.display = 'none';
-      document.getElementById('busca').value = '';
-      
+      cifraAtualId = id;
       try {
-        const response = await fetch(`${supabaseUrl}?id=eq.${id}&select=artista,musica,conteudo_html`, { 
-          headers: { 
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`
-          } 
-        });
-        
-        const dados = await response.json();
+        const res = await fetch(`${supabaseUrl}/cifras?id=eq.${id}&select=artista,musica,conteudo_html`, { headers });
+        const dados = await res.json();
         const cifra = dados[0];
         
         document.getElementById('titulo-musica').innerText = cifra.musica.replace(/-/g, ' ');
         document.getElementById('nome-artista-view').innerText = cifra.artista.replace(/-/g, ' ');
         document.getElementById('cifra-display').innerHTML = cifra.conteudo_html;
         
-        tamanhoFonteAtual = 16;
-        document.getElementById('cifra-display').style.fontSize = tamanhoFonteAtual + 'px';
-
-        mostrarTela('tela-cifra');
+        document.getElementById('cifra-display').style.fontSize = '16px';
+        document.getElementById('scroll-bar').style.display = 'flex';
+        
+        mudarAba('cifra');
         window.scrollTo(0, 0);
-      } catch (e) {
-        alert("Erro ao abrir a cifra.");
-      }
+      } catch (e) { alert("Erro ao abrir."); }
     }
 
-    // 3. ADICIONAR NOVA CIFRA
-    async function salvarNovaCifra() {
-      const artista = document.getElementById('novo-artista').value.trim();
-      const musica = document.getElementById('nova-musica').value.trim();
-      const conteudo = document.getElementById('novo-conteudo').value;
-
-      if (!artista || !musica || !conteudo) {
-        alert("Preencha todos os campos!"); return;
-      }
-
-      // Adiciona a cifra na string de busca também, para achar por trechos da música
-      const stringBusca = `${artista} ${musica} ${conteudo.substring(0, 200)}`.toLowerCase();
-      const payload = {
-        artista: artista,
-        musica: musica,
-        busca: stringBusca,
-        conteudo_html: conteudo
-      };
-
+    // --- SISTEMA DE LISTAS (REPERTÓRIO) ---
+    async function carregarListas(arquivada) {
+      const containerId = arquivada ? 'container-listas-arquivadas' : 'container-listas-ativas';
+      const container = document.getElementById(containerId);
+      container.innerHTML = 'Buscando...';
+      
       try {
-        const response = await fetch(supabaseUrl, {
-          method: 'POST',
-          headers: {
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
+        const res = await fetch(`${supabaseUrl}/listas?arquivada=eq.${arquivada}&order=data_evento.asc`, { headers });
+        const listas = await res.json();
+        
+        container.innerHTML = '';
+        if(listas.length === 0) container.innerHTML = '<p style="color:#888;">Nenhuma lista encontrada.</p>';
+        
+        listas.forEach(lista => {
+          const div = document.createElement('div');
+          div.className = 'lista-card';
+          // Formata a data se existir
+          let dataFormatada = lista.data_evento ? new Date(lista.data_evento).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'Sem data';
+          
+          div.innerHTML = `<div><span class="lista-titulo">${lista.nome}</span><span class="lista-data">📅 ${dataFormatada}</span></div>`;
+          div.onclick = () => abrirLista(lista.id, lista.nome, dataFormatada, arquivada);
+          container.appendChild(div);
         });
-
-        if (response.ok) {
-          alert("✅ Cifra salva com sucesso!");
-          fecharAdicionar();
-          document.getElementById('novo-artista').value = '';
-          document.getElementById('nova-musica').value = '';
-          document.getElementById('novo-conteudo').value = '';
-        } else {
-          alert("Erro ao salvar. Verifique as permissões no Supabase.");
-        }
-      } catch (e) {
-        alert("Erro de conexão.");
-      }
+      } catch (e) { container.innerHTML = 'Erro ao carregar.'; }
     }
 
-    // 4. FERRAMENTAS (Aumentar Fonte e Transpor Tom)
+    async function criarLista() {
+      const nome = document.getElementById('nl-nome').value;
+      const data = document.getElementById('nl-data').value;
+      if(!nome) return alert('Digite um nome!');
+      
+      try {
+        const payload = { nome: nome, data_evento: data || null };
+        const res = await fetch(`${supabaseUrl}/listas`, { method: 'POST', headers, body: JSON.stringify(payload) });
+        if(res.ok) {
+          document.getElementById('form-nova-lista').style.display = 'none';
+          document.getElementById('nl-nome').value = '';
+          carregarListas(false);
+        }
+      } catch (e) { alert("Erro ao criar lista."); }
+    }
+
+    async function abrirLista(id, nome, dataStr, isArquivada) {
+      listaAtualId = id;
+      document.getElementById('vl-nome').innerText = nome;
+      document.getElementById('vl-data').innerText = dataStr;
+      
+      const btnArquivar = document.getElementById('vl-btn-arquivar');
+      if(isArquivada) {
+        btnArquivar.innerText = "Desarquivar";
+        btnArquivar.onclick = () => alterarStatusLista(id, false);
+      } else {
+        btnArquivar.innerText = "Arquivar Lista";
+        btnArquivar.onclick = () => alterarStatusLista(id, true);
+      }
+
+      const container = document.getElementById('vl-cifras');
+      container.innerHTML = 'Buscando músicas...';
+      
+      // Busca as cifras que pertencem a essa lista
+      try {
+        const res = await fetch(`${supabaseUrl}/lista_cifras?lista_id=eq.${id}&select=id,cifras(id,musica,artista)`, { headers });
+        const itens = await res.json();
+        
+        container.innerHTML = '';
+        if(itens.length === 0) container.innerHTML = '<p style="color:#888;">Lista vazia. Adicione músicas buscando na lupa.</p>';
+        
+        itens.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'item-musica';
+          div.innerHTML = `<div><span class="nome-musica">${item.cifras.musica.replace(/-/g, ' ')}</span><span class="nome-artista">${item.cifras.artista.replace(/-/g, ' ')}</span></div>
+                           <button class="btn-danger" style="border:none; font-size:18px;" onclick="removerDaLista('${item.id}', event)">🗑️</button>`;
+          div.onclick = (e) => { if(e.target.tagName !== 'BUTTON') carregarCifraPorId(item.cifras.id); };
+          container.appendChild(div);
+        });
+        abaAnterior = 'listas';
+        mudarAba('ver-lista');
+      } catch (e) { container.innerHTML = 'Erro ao carregar músicas.'; }
+    }
+
+    async function alterarStatusLista(id, arquivar) {
+      if(!confirm(`Deseja ${arquivar ? 'arquivar' : 'desarquivar'} esta lista?`)) return;
+      try {
+        await fetch(`${supabaseUrl}/listas?id=eq.${id}`, { method: 'PATCH', headers, body: JSON.stringify({arquivada: arquivar}) });
+        mudarAba(arquivar ? 'historico' : 'listas');
+      } catch(e) { alert("Erro ao atualizar."); }
+    }
+
+    async function removerDaLista(relacaoId, event) {
+      event.stopPropagation();
+      if(!confirm("Remover música do repertório?")) return;
+      try {
+        await fetch(`${supabaseUrl}/lista_cifras?id=eq.${relacaoId}`, { method: 'DELETE', headers });
+        abrirLista(listaAtualId, document.getElementById('vl-nome').innerText, document.getElementById('vl-data').innerText, false);
+      } catch(e) { alert("Erro ao remover."); }
+    }
+
+    // --- ADICIONAR CIFRA A UMA LISTA (MODAL) ---
+    async function abrirModalAddLista() {
+      const container = document.getElementById('ml-opcoes');
+      container.innerHTML = 'Buscando listas ativas...';
+      document.getElementById('modal-add-lista').style.display = 'flex';
+      
+      try {
+        const res = await fetch(`${supabaseUrl}/listas?arquivada=eq.false`, { headers });
+        const listas = await res.json();
+        container.innerHTML = '';
+        if(listas.length === 0) container.innerHTML = '<p>Nenhuma lista ativa. Crie uma na aba Listas primeiro.</p>';
+        
+        listas.forEach(l => {
+          const div = document.createElement('div');
+          div.className = 'lista-card';
+          div.innerHTML = `<strong>${l.nome}</strong>`;
+          div.onclick = () => salvarCifraNaLista(l.id);
+          container.appendChild(div);
+        });
+      } catch (e) { container.innerHTML = 'Erro.'; }
+    }
+
+    async function salvarCifraNaLista(idLista) {
+      try {
+        await fetch(`${supabaseUrl}/lista_cifras`, { 
+          method: 'POST', headers, 
+          body: JSON.stringify({ lista_id: idLista, cifra_id: cifraAtualId }) 
+        });
+        document.getElementById('modal-add-lista').style.display = 'none';
+        alert("✅ Adicionado ao repertório!");
+      } catch(e) { alert("Erro ao adicionar."); }
+    }
+
+    // --- ROLAGEM AUTOMÁTICA (AUTO-SCROLL) ---
+    let scrollInterval;
+    let isScrolling = false;
+    let scrollSpeed = 50; // ms por pixel (menor = mais rápido)
+
+    function toggleScroll() {
+      const btn = document.getElementById('btn-play-scroll');
+      if (isScrolling) {
+        pararScroll();
+      } else {
+        isScrolling = true;
+        btn.innerHTML = '⏸ PAUSE';
+        btn.style.color = '#fff';
+        scrollInterval = setInterval(() => {
+          window.scrollBy(0, 1);
+          // Para sozinho se chegar no fim da página
+          if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) pararScroll();
+        }, scrollSpeed);
+      }
+    }
+    
+    function pararScroll() {
+      clearInterval(scrollInterval);
+      isScrolling = false;
+      const btn = document.getElementById('btn-play-scroll');
+      if(btn) { btn.innerHTML = '▶ PLAY'; btn.style.color = 'var(--accent)'; }
+    }
+
+    function alterarVelocidadeScroll(delta) {
+      scrollSpeed += delta;
+      if(scrollSpeed < 10) scrollSpeed = 10; // Limite rápido
+      if(scrollSpeed > 100) scrollSpeed = 100; // Limite devagar
+      if(isScrolling) { pararScroll(); toggleScroll(); } // Reinicia com nova velocidade
+    }
+
+    // --- FERRAMENTAS DE CIFRA E TOM ---
+    const escala = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const conversorBemol = {'Db': 'C#', 'Eb': 'D#', 'Gb': 'F#', 'Ab': 'G#', 'Bb': 'A#'};
+    let tamanhoFonteAtual = 16;
+
     function mudarTamanhoFonte(passos) {
       tamanhoFonteAtual += passos;
-      if (tamanhoFonteAtual < 10) tamanhoFonteAtual = 10;
-      if (tamanhoFonteAtual > 40) tamanhoFonteAtual = 40; // Limite um pouco maior
+      if (tamanhoFonteAtual < 12) tamanhoFonteAtual = 12;
+      if (tamanhoFonteAtual > 40) tamanhoFonteAtual = 40;
       document.getElementById('cifra-display').style.fontSize = tamanhoFonteAtual + 'px';
     }
 
     function mudarTom(passos) {
       const container = document.getElementById('cifra-display');
-      let textoAtual = container.innerHTML;
       const regexAcordes = /\b([CDEFGAB](?:#|b)?)(m|dim|aug|sus|maj|min|[0-9])*(?![a-zA-Z#b])/g;
-
-      const textoTransposto = textoAtual.replace(regexAcordes, function(acordeCompleto, notaRaiz, complemento) {
+      container.innerHTML = container.innerHTML.replace(regexAcordes, function(acordeCompleto, notaRaiz, complemento) {
         let notaBase = conversorBemol[notaRaiz] || notaRaiz;
         let index = escala.indexOf(notaBase);
         if (index === -1) return acordeCompleto; 
-
         let novoIndex = (index + passos) % 12;
         if (novoIndex < 0) novoIndex += 12; 
-
         return escala[novoIndex] + (complemento || '');
       });
-      container.innerHTML = textoTransposto;
     }
 
-    // 5. CONTROLE DAS TELAS
-    function mostrarTela(idTela) {
-      document.getElementById('tela-cifra').style.display = 'none';
-      document.getElementById('tela-adicionar').style.display = 'none';
-      if (idTela) document.getElementById(idTela).style.display = 'block';
+    // --- SALVAR NOVA CIFRA MANUALMENTE ---
+    async function salvarNovaCifra() {
+      const artista = document.getElementById('nc-artista').value.trim();
+      const musica = document.getElementById('nc-musica').value.trim();
+      const conteudo = document.getElementById('nc-conteudo').value;
+      if (!artista || !musica || !conteudo) return alert("Preencha todos os campos!");
+      
+      const payload = { artista, musica, busca: `${artista} ${musica} ${conteudo.substring(0, 100)}`.toLowerCase(), conteudo_html: conteudo };
+      try {
+        const res = await fetch(`${supabaseUrl}/cifras`, { method: 'POST', headers, body: JSON.stringify(payload) });
+        if(res.ok) {
+          alert("Cifra salva!");
+          document.getElementById('nc-artista').value = ''; document.getElementById('nc-musica').value = ''; document.getElementById('nc-conteudo').value = '';
+          mudarAba('busca');
+        } else { alert("Erro ao salvar cifra."); }
+      } catch(e) { alert("Erro de conexão."); }
     }
-    function abrirTelaAdicionar() { mostrarTela('tela-adicionar'); document.getElementById('resultados').style.display = 'none'; }
-    function fecharAdicionar() { mostrarTela(''); }
-    function fecharCifra() { mostrarTela(''); document.getElementById('cifra-display').innerHTML = ''; }
   </script>
-
 </body>
 </html>
