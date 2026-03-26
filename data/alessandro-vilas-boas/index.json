@@ -1,0 +1,464 @@
+[
+  {
+    "name": "A Vida Eterna É",
+    "path": "a-vida-eterna-e",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Ah Se Meu Amado Me Beijasse",
+    "path": "ah-se-meu-amado-me-beijasse",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Aleluia (Quem Muito Foi Perdoado)",
+    "path": "aleluia-quem-muito-foi-perdoado-alessandro-vilas-boas",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Amado Meu",
+    "path": "amado-meu",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Anjos Ao Redor do Trono",
+    "path": "anjos-ao-redor-do-trono",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Ao Lembrarmos",
+    "path": "ao-lembrarmos",
+    "default-tone": "Am",
+    "categories": []
+  },
+  {
+    "name": "As Nações Te Desejam",
+    "path": "as-nacoes-te-desejam",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Como Eu Te Amo",
+    "path": "como-eu-te-amo",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Como Prometeste/Aqui como no Céu/Aviva-nos/Yeshua",
+    "path": "como-prometesteaqui-como-no-ceuaviva-nosyeshua",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Cristo",
+    "path": "cristo",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Cristo / Yeshua",
+    "path": "cristo-yeshua",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Dedilhar o Seu Coração (part. Brunna Vilas Boas)",
+    "path": "dedilhar-o-seu-coracao-part-brunna-vilas-boas",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Deixa Queimar",
+    "path": "deixa-queimar-2",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Deixa Queimar / Acende Um Fogo (pot-pourri)",
+    "path": "deixa-queimar--acende-um-fogo-pot-pourri",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Deixa Queimar (part. Brunão Morada)",
+    "path": "deixa-queimar",
+    "default-tone": "A",
+    "categories": []
+  },
+  {
+    "name": "Deixe o Céu Descer + Como As Águas Cobrem o Mar (Pot-Pourri)",
+    "path": "deixe-o-ceu-descer-como-as-aguas-cobrem-o-mar-pot-pourri",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Doce Como o Mel",
+    "path": "doce-como-o-mel",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Doce Jesus (Live In The UK)",
+    "path": "doce-jesus-live-in-the-uk",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Dono do Meu Coração",
+    "path": "dono-do-meu-coracao",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Ekballo",
+    "path": "ekballo",
+    "default-tone": "Am",
+    "categories": []
+  },
+  {
+    "name": "Enche-me / Pelo Jardim",
+    "path": "enche-me-pelo-jardim",
+    "default-tone": "Am",
+    "categories": []
+  },
+  {
+    "name": "Es Él",
+    "path": "es-el",
+    "default-tone": "Bb",
+    "categories": []
+  },
+  {
+    "name": "És Minha Casa",
+    "path": "s-minha-casa",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Eu Quero Conhecer Jesus",
+    "path": "eu-quero-conhecer-jesus",
+    "default-tone": "Dm",
+    "categories": []
+  },
+  {
+    "name": "Eu Quero Morrer Na Tua Presença",
+    "path": "eu-quero-morrer-na-tua-presenca",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Firmado Na Rocha (Yahweh)",
+    "path": "firmado-na-rocha-yahweh",
+    "default-tone": "B",
+    "categories": []
+  },
+  {
+    "name": "Firmado Na Rocha (Yahweh) - Ao Vivo",
+    "path": "firmado-na-rocha-yahweh-ao-vivo",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Fogo Em Meus Ossos",
+    "path": "fogo-em-meus-ossos",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Grande Amor / Teu Amor É Melhor",
+    "path": "grande-amor-teu-amor-e-melhor",
+    "default-tone": "Bb",
+    "categories": []
+  },
+  {
+    "name": "Irresistível Jesus",
+    "path": "irresistivel-jesus",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Já Estive Em Outros Lugares (part. One Sounds)",
+    "path": "ja-estive-em-outros-lugares-part-one-sounds",
+    "default-tone": "Em",
+    "categories": []
+  },
+  {
+    "name": "Jeremias 23",
+    "path": "jeremias-23",
+    "default-tone": "E",
+    "categories": []
+  },
+  {
+    "name": "Lágrimas Felizes - On The Road",
+    "path": "lagrimas-felizes-on-the-road",
+    "default-tone": "A",
+    "categories": []
+  },
+  {
+    "name": "Let It Burn",
+    "path": "let-it-burn",
+    "default-tone": "E",
+    "categories": []
+  },
+  {
+    "name": "Maranata",
+    "path": "maranata",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Maranata, Ora Vem!",
+    "path": "maranata-ora-vem",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Me Faz Te Amar Mais",
+    "path": "me-faz-te-amar-mais",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Meu Irmão É Um Leão",
+    "path": "meu-irmao--um-leao",
+    "default-tone": "Am",
+    "categories": []
+  },
+  {
+    "name": "Nada Mais (Espontâneo)",
+    "path": "nada-mais-espontaneo",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Nós Queremos Ver",
+    "path": "nos-queremos-ver",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "O Carpinteiro / Isaías 9 (Pot-Pourri)",
+    "path": "o-carpinteiro-isaias-9-pot-pourri",
+    "default-tone": "Bm",
+    "categories": []
+  },
+  {
+    "name": "O Carpinteiro",
+    "path": "o-carpinteiro",
+    "default-tone": "C#m",
+    "categories": []
+  },
+  {
+    "name": "O Fogo Nunca Dorme  / Pra Sempre /  Canção do Apocalipse (Medley)",
+    "path": "o-fogo-nunca-dorme-pra-sempre-cancao-do-apocalipse-medley",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "O Fogo Nunca Dorme / Aleluia (Quem Muito Foi Perdoado) (Pot-Pourri)",
+    "path": "o-fogo-nunca-dorme-aleluia-quem-muito-foi-perdoado-medley",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "O Fogo Nunca Dorme / Uma Coisa (Pot-Pourri)",
+    "path": "o-fogo-nunca-dorme-e-uma-coisa",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "O Fogo Nunca Dorme",
+    "path": "o-fogo-nunca-dorme",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "O Sol Brilha Mais Forte Agora (Part. Ton Molinari)",
+    "path": "o-sol-brilha-mais-forte-agora-part-ton-molinari",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Oh Se Fendesses Os Céus",
+    "path": "oh-se-fendesses-os-ceus",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "One Desire (Live Uk)",
+    "path": "one-desire-live-uk",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Ora Vem",
+    "path": "ora-vem",
+    "default-tone": "E",
+    "categories": []
+  },
+  {
+    "name": "Pela Manhã",
+    "path": "pela-manha",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Pela Manhã (Espontâneo)",
+    "path": "pela-manha-espontaneo",
+    "default-tone": "F",
+    "categories": []
+  },
+  {
+    "name": "Peregrino",
+    "path": "peregrino",
+    "default-tone": "E",
+    "categories": []
+  },
+  {
+    "name": "Pode Entrar",
+    "path": "pode-entrar",
+    "default-tone": "C#m",
+    "categories": []
+  },
+  {
+    "name": "Quem Muito Foi Perdoado Muito Ama",
+    "path": "quem-muito-foi-perdoado-muito-ama",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Quero Conhecer Jesus",
+    "path": "quero-conhecer-jesus-o-meu-amado--o-mais-belo",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Quero Conhecer Jesus / Agnus Dei / Maranata / Oh Quão Lindo Esse Nome É / Consagração",
+    "path": "quero-conhecer-jesus-agnus-dei-maranata-oh-quao-lindo-esse-nome-e-consagracao",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Razão de Tudo - On The Road",
+    "path": "razao-de-tudo-on-the-road",
+    "default-tone": "E",
+    "categories": []
+  },
+  {
+    "name": "Real e Constante",
+    "path": "real-e-constante",
+    "default-tone": "A",
+    "categories": []
+  },
+  {
+    "name": "Rio Que Alegra",
+    "path": "rio-que-alegra",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Romance Infinito",
+    "path": "romance-infinito",
+    "default-tone": "Eb",
+    "categories": []
+  },
+  {
+    "name": "Ser Mudado",
+    "path": "ser-mudado",
+    "default-tone": "Am",
+    "categories": []
+  },
+  {
+    "name": "Só Quero Te Amar Mais Que Ontem",
+    "path": "so-quero-te-amar-mais-que-ontem",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Só Teu Nome É",
+    "path": "so-teu-nome-",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Te Conhecer Pra Sempre",
+    "path": "te-conhecer-pra-sempre",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Todas As Minhas Fontes (Espontâneo)",
+    "path": "todas-as-minhas-fontes-espontaneo",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Tu Es Adorado",
+    "path": "tu-es-adorado",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Tu És Bom",
+    "path": "tu-es-bom",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Tu És Santo",
+    "path": "tu-es-santo",
+    "default-tone": "C",
+    "categories": []
+  },
+  {
+    "name": "Tu És Tudo",
+    "path": "tu-s-tudo",
+    "default-tone": "D",
+    "categories": []
+  },
+  {
+    "name": "Yeshua",
+    "path": "yeshua",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Vem Habitar",
+    "path": "vem-habitar",
+    "default-tone": "Em",
+    "categories": []
+  },
+  {
+    "name": "Cristo Sustenta",
+    "path": "cristo-sustenta-2",
+    "default-tone": "A",
+    "categories": []
+  },
+  {
+    "name": "Cristo Sustenta",
+    "path": "cristo-sustenta",
+    "default-tone": "A",
+    "categories": []
+  },
+  {
+    "name": "Filho do Homem",
+    "path": "filho-do-homem",
+    "default-tone": "B",
+    "categories": []
+  },
+  {
+    "name": "Todos Os Meus Dias",
+    "path": "todos-os-meus-dias",
+    "default-tone": "G",
+    "categories": []
+  },
+  {
+    "name": "Deus De Paz",
+    "path": "deus-de-paz",
+    "default-tone": "Em",
+    "categories": []
+  }
+]
