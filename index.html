@@ -293,8 +293,8 @@
         <h3>Importar Música</h3>
         <button class="btn-icon-only" onclick="fecharModal('modal-cifra-importar')">✕</button>
       </div>
-      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Cole um link do CifraClub ou Cifras.com.br. O sistema extrairá título, artista e cifra automaticamente.</p>
-      <input type="url" id="cc-url" placeholder="Ex: https://www.cifraclub.com.br/isadora-pompeo/bencao/">
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Cole um link do <strong>CifraClub</strong> ou <strong>Cifras.com.br</strong>. O sistema extrairá título, artista e cifra automaticamente.</p>
+      <input type="url" id="cc-url" placeholder="Cole o link aqui...">
       <div id="cc-status" style="color: var(--accent); font-size: 14px; margin-bottom: 16px; display: none;">Extraindo dados. Aguarde...</div>
       <button class="btn btn-primary" style="width: 100%;" onclick="importarLink()">Extrair Dados</button>
     </div>
@@ -741,11 +741,13 @@
       const doc = parser.parseFromString(data.contents, "text/html");
 
       // Detecta qual site está sendo usado
-      if(urlInput.includes("cifraclub.com.br")) {
-        // === CIFRACLUB ===
+      if(urlInput.includes("cifras.com.br")) {
+        // === CIFRAS.COM.BR ===
         
-        // Tenta a página de imprimir primeiro
+        // Sempre adiciona /imprimir.html para pegar a versão limpa
         let printUrl = urlInput;
+        // Remove qualquer query string ou fragmento
+        printUrl = printUrl.split('?')[0].split('#')[0];
         if(!printUrl.endsWith('/')) printUrl += '/';
         if(!printUrl.includes('imprimir.html')) {
           printUrl += 'imprimir.html';
@@ -755,68 +757,25 @@
         const printData = await printResponse.json();
         const printDoc = parser.parseFromString(printData.contents, "text/html");
         
-        // Na página imprimir.html
-        const tituloPrint = printDoc.querySelector('h1.t1') || printDoc.querySelector('h1');
-        const artistaPrint = printDoc.querySelector('h2.t3') || printDoc.querySelector('h2');
-        const cifraPrint = printDoc.querySelector('pre');
-        
-        if(cifraPrint) {
-          titulo = tituloPrint ? tituloPrint.innerText.trim() : "";
-          artista = artistaPrint ? artistaPrint.innerText.trim() : "";
-          cifra = cifraPrint.innerText;
-        } else {
-          // Fallback: pega da página normal
-          titulo = doc.querySelector('h1') ? doc.querySelector('h1').innerText.trim() : "";
-          const h2s = doc.querySelectorAll('h2');
-          if(h2s.length > 0) artista = h2s[0].innerText.trim();
-          
-          // Tenta encontrar a cifra na página normal
-          const cifraSection = doc.querySelector('pre') || doc.querySelector('.cifra') || doc.querySelector('[class*="cifra"]') || doc.querySelector('article');
-          if(cifraSection) {
-            cifra = cifraSection.innerText;
-          }
-        }
-        
-      } else if(urlInput.includes("cifras.com.br")) {
-        // === CIFRAS.COM.BR ===
-        
         // Extrai artista e música da URL
-        const urlParts = urlInput.split('/').filter(p => p);
+        const urlParts = printUrl.split('/').filter(p => p);
         if(urlParts.length >= 2) {
-          artista = urlParts[urlParts.length - 2].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          const musicaSlug = urlParts[urlParts.length - 1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          // Remove .htm ou .html do final
+          artista = urlParts[urlParts.length - 3].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          const musicaSlug = urlParts[urlParts.length - 2].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
           titulo = musicaSlug.replace(/\.htm.*$/i, '');
         }
         
-        // Procura a cifra na página - cifras.com.br usa várias estruturas
-        // Opção 1: pre com classe cifra
-        let cifraEl = doc.querySelector('pre.cifra');
+        // Procura a cifra na página de impressão
+        let cifraEl = printDoc.querySelector('pre.cifra') || printDoc.querySelector('pre');
         
-        // Opção 2: div com a cifra (estrutura comum)
         if(!cifraEl) {
-          const allPre = doc.querySelectorAll('pre');
+          const allPre = printDoc.querySelectorAll('pre');
           for(let p of allPre) {
-            if(p.innerText.includes('Chorus') || p.innerText.includes('Intro') || 
-               p.innerText.includes('Verse') || p.innerText.includes('[') || 
-               (p.innerText.match(/[A-G]#?m?/g) && p.innerText.match(/[A-G]#?m?/g).length > 5)) {
+            if(p.innerText.includes('[') || 
+               (p.innerText.match(/[A-G]#?m?/g) && p.innerText.match(/[A-G]#?m?/g).length > 3)) {
               cifraEl = p;
               break;
             }
-          }
-        }
-        
-        // Opção 3: div#cifra ou similar
-        if(!cifraEl) {
-          cifraEl = doc.querySelector('#cifra') || doc.querySelector('[id*="cifra"]') || 
-                    doc.querySelector('.cifra') || doc.querySelector('[class*="cifra"]');
-        }
-        
-        // Opção 4: article ou main
-        if(!cifraEl) {
-          const article = doc.querySelector('article') || doc.querySelector('main');
-          if(article) {
-            cifra = article.innerText;
           }
         }
         
@@ -824,32 +783,18 @@
           cifra = cifraEl.innerText;
         }
         
-        // Se ainda não encontrou, tenta pelo título da música que geralmente aparece na página
-        if(!cifra) {
-          // Procura por qualquer elemento que contenha cifra/letra
-          const bodyText = doc.body.innerText;
-          // Tenta extrair só a parte da cifra (geralmente tem acordes como Am, G, C, etc.)
-          const acordeRegex = /\b[A-G][#b]?(m|maj|min|dim|aug|sus|add)?[0-9]?\b/g;
-          const lines = bodyText.split('\n');
-          let inCifra = false;
-          let cifraLines = [];
-          
-          for(let line of lines) {
-            const hasAcordes = line.match(acordeRegex);
-            if(hasAcordes && hasAcordes.length >= 2) {
-              inCifra = true;
-            }
-            if(inCifra) {
-              cifraLines.push(line);
-              // Se encontrou muitas linhas ou chegou ao final
-              if(cifraLines.length > 100 || line.includes('Copyright') || line.includes('http')) {
-                break;
-              }
-            }
-          }
-          if(cifraLines.length > 5) {
-            cifra = cifraLines.join('\n');
-          }
+      } else if(urlInput.includes("cifraclub.com.br")) {
+        // === CIFRACLUB ===
+        
+        // Para CifraClub, pega da página normal
+        titulo = doc.querySelector('h1') ? doc.querySelector('h1').innerText.trim() : "";
+        const h2s = doc.querySelectorAll('h2');
+        if(h2s.length > 0) artista = h2s[0].innerText.trim();
+        
+        // Tenta encontrar a cifra na página normal
+        const cifraSection = doc.querySelector('pre') || doc.querySelector('.cifra') || doc.querySelector('[class*="cifra"]') || doc.querySelector('article');
+        if(cifraSection) {
+          cifra = cifraSection.innerText;
         }
       }
       
