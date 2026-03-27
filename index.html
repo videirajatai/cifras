@@ -212,13 +212,13 @@
       <h3 style="font-weight: 500; margin-top: 0;">Cadastrar Cifra</h3>
       
       <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px; margin-bottom: 20px;">
-        <h4 style="margin: 0 0 10px 0;">Mágica do CifraClub</h4>
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Cole qualquer link do CifraClub. O sistema buscará a versão de impressão, mais limpa e direta.</p>
-        <button class="btn btn-primary" onclick="abrirModal('modal-cifra-importar')">Colar Link do CifraClub</button>
+        <h4 style="margin: 0 0 10px 0;">🔮 Importar do Site</h4>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Cole um link do <strong>CifraClub</strong> ou <strong>Cifras.com.br</strong>. O sistema extrairá automaticamente título, artista e cifra.</p>
+        <button class="btn btn-primary" onclick="abrirModal('modal-cifra-importar')">Importar Link</button>
       </div>
 
       <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px;">
-        <h4 style="margin: 0 0 10px 0;">Modo Raiz</h4>
+        <h4 style="margin: 0 0 10px 0;">Modo Manual</h4>
         <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Digite ou cole o texto puro da sua cifra manualmente.</p>
         <button class="btn" style="background: rgba(255,255,255,0.1); color: white;" onclick="abrirModal('modal-cifra-manual')">Cadastro Manual</button>
       </div>
@@ -287,16 +287,16 @@
     </div>
   </div>
 
-  <div id="modal-cifra-importar" class="glass-modal">
+      <div id="modal-cifra-importar" class="glass-modal">
     <div class="modal-panel">
       <div class="modal-header">
-        <h3>Mágica do CifraClub</h3>
+        <h3>Importar Música</h3>
         <button class="btn-icon-only" onclick="fecharModal('modal-cifra-importar')">✕</button>
       </div>
-      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Cole a URL normal da música, o sistema vai achar a versão de impressão sozinho e extrair os dados.</p>
-      <input type="url" id="cc-url" placeholder="Ex: https://www.cifraclub.com.br/isadora-pompeo/bencaos-que-nao-tem-fim/">
-      <div id="cc-status" style="color: var(--accent); font-size: 14px; margin-bottom: 16px; display: none;">Raspando a versão de impressão. Aguarde...</div>
-      <button class="btn btn-primary" style="width: 100%;" onclick="importarCifraClub()">Extrair Dados</button>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Cole um link do CifraClub ou Cifras.com.br. O sistema extrairá título, artista e cifra automaticamente.</p>
+      <input type="url" id="cc-url" placeholder="Ex: https://www.cifraclub.com.br/isadora-pompeo/bencao/">
+      <div id="cc-status" style="color: var(--accent); font-size: 14px; margin-bottom: 16px; display: none;">Extraindo dados. Aguarde...</div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="importarLink()">Extrair Dados</button>
     </div>
   </div>
 
@@ -721,19 +721,15 @@
     } catch(e) { alert("Erro."); }
   }
 
-  // --- IMPORTAÇÃO INTELIGENTE DO CIFRACLUB (IMPRIMIR) ---
-  async function importarCifraClub() {
+  // --- IMPORTAÇÃO INTELIGENTE DE CIFRAS (CIFRACLUB OU CIFRAS.COM.BR) ---
+  async function importarLink() {
     let urlInput = document.getElementById('cc-url').value.trim();
-    if(!urlInput.includes("cifraclub.com.br")) return alert("Cole um link válido do CifraClub.");
-
-    // Tratamento Inteligente da URL: Se não for a página de imprimir, a gente forja ela.
-    if(!urlInput.endsWith('/')) urlInput += '/';
-    if(!urlInput.includes('imprimir.html')) {
-      urlInput += 'imprimir.html';
-    }
+    if(!urlInput) return alert("Cole um link válido.");
 
     const statusDiv = document.getElementById('cc-status');
     statusDiv.style.display = 'block';
+    
+    let titulo = "", artista = "", cifra = "";
     
     try {
       // Proxy para contornar bloqueios do navegador
@@ -744,24 +740,136 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(data.contents, "text/html");
 
-      // Na página imprimir.html as tags mudam levemente, é bem mais limpo.
-      // O titulo geralmente é <h1> ou <h1 class="t1"> e artista <h2>
-      const tituloEl = doc.querySelector('h1.t1') || doc.querySelector('h1');
-      const artistaEl = doc.querySelector('h2.t3') || doc.querySelector('h2');
-      const cifraEl = doc.querySelector('pre'); 
-
-      if(!cifraEl) throw new Error("Cifra não encontrada no HTML de impressão.");
-
-      document.getElementById('nc-musica').value = tituloEl ? tituloEl.innerText.trim() : "";
-      document.getElementById('nc-artista').value = artistaEl ? artistaEl.innerText.trim() : "";
-      document.getElementById('nc-conteudo').value = cifraEl.innerText;
+      // Detecta qual site está sendo usado
+      if(urlInput.includes("cifraclub.com.br")) {
+        // === CIFRACLUB ===
+        
+        // Tenta a página de imprimir primeiro
+        let printUrl = urlInput;
+        if(!printUrl.endsWith('/')) printUrl += '/';
+        if(!printUrl.includes('imprimir.html')) {
+          printUrl += 'imprimir.html';
+        }
+        
+        const printResponse = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(printUrl)}`);
+        const printData = await printResponse.json();
+        const printDoc = parser.parseFromString(printData.contents, "text/html");
+        
+        // Na página imprimir.html
+        const tituloPrint = printDoc.querySelector('h1.t1') || printDoc.querySelector('h1');
+        const artistaPrint = printDoc.querySelector('h2.t3') || printDoc.querySelector('h2');
+        const cifraPrint = printDoc.querySelector('pre');
+        
+        if(cifraPrint) {
+          titulo = tituloPrint ? tituloPrint.innerText.trim() : "";
+          artista = artistaPrint ? artistaPrint.innerText.trim() : "";
+          cifra = cifraPrint.innerText;
+        } else {
+          // Fallback: pega da página normal
+          titulo = doc.querySelector('h1') ? doc.querySelector('h1').innerText.trim() : "";
+          const h2s = doc.querySelectorAll('h2');
+          if(h2s.length > 0) artista = h2s[0].innerText.trim();
+          
+          // Tenta encontrar a cifra na página normal
+          const cifraSection = doc.querySelector('pre') || doc.querySelector('.cifra') || doc.querySelector('[class*="cifra"]') || doc.querySelector('article');
+          if(cifraSection) {
+            cifra = cifraSection.innerText;
+          }
+        }
+        
+      } else if(urlInput.includes("cifras.com.br")) {
+        // === CIFRAS.COM.BR ===
+        
+        // Extrai artista e música da URL
+        const urlParts = urlInput.split('/').filter(p => p);
+        if(urlParts.length >= 2) {
+          artista = urlParts[urlParts.length - 2].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          const musicaSlug = urlParts[urlParts.length - 1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          // Remove .htm ou .html do final
+          titulo = musicaSlug.replace(/\.htm.*$/i, '');
+        }
+        
+        // Procura a cifra na página - cifras.com.br usa várias estruturas
+        // Opção 1: pre com classe cifra
+        let cifraEl = doc.querySelector('pre.cifra');
+        
+        // Opção 2: div com a cifra (estrutura comum)
+        if(!cifraEl) {
+          const allPre = doc.querySelectorAll('pre');
+          for(let p of allPre) {
+            if(p.innerText.includes('Chorus') || p.innerText.includes('Intro') || 
+               p.innerText.includes('Verse') || p.innerText.includes('[') || 
+               (p.innerText.match(/[A-G]#?m?/g) && p.innerText.match(/[A-G]#?m?/g).length > 5)) {
+              cifraEl = p;
+              break;
+            }
+          }
+        }
+        
+        // Opção 3: div#cifra ou similar
+        if(!cifraEl) {
+          cifraEl = doc.querySelector('#cifra') || doc.querySelector('[id*="cifra"]') || 
+                    doc.querySelector('.cifra') || doc.querySelector('[class*="cifra"]');
+        }
+        
+        // Opção 4: article ou main
+        if(!cifraEl) {
+          const article = doc.querySelector('article') || doc.querySelector('main');
+          if(article) {
+            cifra = article.innerText;
+          }
+        }
+        
+        if(cifraEl) {
+          cifra = cifraEl.innerText;
+        }
+        
+        // Se ainda não encontrou, tenta pelo título da música que geralmente aparece na página
+        if(!cifra) {
+          // Procura por qualquer elemento que contenha cifra/letra
+          const bodyText = doc.body.innerText;
+          // Tenta extrair só a parte da cifra (geralmente tem acordes como Am, G, C, etc.)
+          const acordeRegex = /\b[A-G][#b]?(m|maj|min|dim|aug|sus|add)?[0-9]?\b/g;
+          const lines = bodyText.split('\n');
+          let inCifra = false;
+          let cifraLines = [];
+          
+          for(let line of lines) {
+            const hasAcordes = line.match(acordeRegex);
+            if(hasAcordes && hasAcordes.length >= 2) {
+              inCifra = true;
+            }
+            if(inCifra) {
+              cifraLines.push(line);
+              // Se encontrou muitas linhas ou chegou ao final
+              if(cifraLines.length > 100 || line.includes('Copyright') || line.includes('http')) {
+                break;
+              }
+            }
+          }
+          if(cifraLines.length > 5) {
+            cifra = cifraLines.join('\n');
+          }
+        }
+      }
+      
+      // Validação
+      if(!titulo && !artista && !cifra) {
+        throw new Error("Não foi possível extrair dados da página.");
+      }
+      
+      // Preenche o formulário de revisão
+      document.getElementById('nc-musica').value = titulo;
+      document.getElementById('nc-artista').value = artista;
+      document.getElementById('nc-conteudo').value = cifra;
 
       fecharModal('modal-cifra-importar');
-      abrirModal('modal-cifra-manual'); // Mostra no painel manual pra revisão final!
+      abrirModal('modal-cifra-manual');
       document.getElementById('cc-url').value = '';
 
     } catch(error) {
-      alert("Erro ao extrair. Tente o modo manual.");
+      console.error("Erro na importação:", error);
+      alert("Erro ao extrair. Tente o modo manual.\n\nDica: Copie a cifra manualmente do site.");
     } finally {
       statusDiv.style.display = 'none';
     }
