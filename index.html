@@ -3,409 +3,424 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Videira Cifras - Moderno</title>
+  <title>Videira Cifras - Premium</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* RESET E CONTAINER PRINCIPAL */
-    .videira-app {
-      /* Variáveis de um Dark Mode Moderno */
-      --bg-app: #09090b;        
-      --bg-surface: #18181b;    
-      --bg-hover: #27272a;      
-      --text-primary: #fafafa;  
-      --text-secondary: #a1a1aa;
-      --accent: #3b82f6;        
-      --accent-hover: #2563eb;  
-      --border: #27272a;        
-      --danger: #ef4444;
+    :root {
+      --bg-base: #030712;
+      --bg-surface: rgba(31, 41, 55, 0.4);
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --accent: #6366f1;       /* Indigo Vibrante */
+      --accent-glow: rgba(99, 102, 241, 0.4);
+      --accent-hover: #4f46e5;
+      --border: rgba(255, 255, 255, 0.08);
+      --danger: #fb7185;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+    }
 
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-app);
-      color: var(--text-primary);
-      
-      /* Trava o tamanho para criar a barra de rolagem interna */
-      height: 100vh; /* Se for embutir em uma div, mude para 100% ou um height fixo (ex: 800px) */
+    /* Container Principal - Adapta-se à sua aba */
+    .videira-app {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-base);
+      background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, transparent 50%);
+      color: var(--text-main);
+      height: 100%;
+      min-height: 80vh; 
+      max-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden; 
+      overflow: hidden;
       margin: 0;
     }
 
     .videira-app * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
-    /* NAVEGAÇÃO TOPO (Fixa) */
-    .videira-app .top-nav {
-      display: flex;
-      background-color: var(--bg-surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 16px;
+    /* CABEÇALHO / COMANDO DE BUSCA GIGANTE */
+    .v-header {
+      padding: 24px;
       flex-shrink: 0;
     }
-    .videira-app .nav-item {
-      padding: 16px 20px;
-      color: var(--text-secondary);
-      font-weight: 500;
-      font-size: 14px;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s ease;
-    }
-    .videira-app .nav-item:hover { color: var(--text-primary); }
-    .videira-app .nav-item.active { color: var(--text-primary); border-bottom-color: var(--accent); }
-
-    /* ÁREA DE ROLAGEM PRINCIPAL */
-    .videira-app .content-area {
-      flex: 1;
-      overflow-y: auto; /* Aqui acontece a mágica da rolagem interna */
-      padding: 24px;
-      position: relative;
-    }
-
-    /* Ocultar barra de rolagem no estilo mobile moderno (opcional) */
-    .videira-app .content-area::-webkit-scrollbar { width: 6px; }
-    .videira-app .content-area::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
-
-    /* ABAS (Conteúdo) */
-    .videira-app .tab-content { display: none; max-width: 800px; margin: 0 auto; width: 100%; padding-bottom: 80px;}
-    .videira-app .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* INPUTS E BOTÕES */
-    .videira-app .input-group { margin-bottom: 16px; position: sticky; top: 0; z-index: 10; background: var(--bg-app); padding-top: 8px; padding-bottom: 8px;}
-    .videira-app .input-box {
-      width: 100%; padding: 14px 16px; font-size: 15px;
-      background-color: var(--bg-surface); border: 1px solid var(--border);
-      color: var(--text-primary); border-radius: 8px; outline: none;
-      transition: border-color 0.2s;
-    }
-    .videira-app .input-box:focus { border-color: var(--accent); }
+    .v-title { font-size: 28px; font-weight: 800; margin: 0 0 20px 0; letter-spacing: -0.5px; background: linear-gradient(to right, #a5b4fc, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
-    .videira-app .btn {
-      background-color: var(--accent); color: white; border: none; padding: 12px 20px;
-      font-weight: 600; border-radius: 8px; cursor: pointer; font-size: 14px; transition: background 0.2s;
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    .search-wrapper { position: relative; width: 100%; }
+    .search-input {
+      width: 100%; padding: 18px 24px; font-size: 18px; font-family: 'Outfit', sans-serif;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      color: var(--text-main); outline: none; transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2); backdrop-filter: blur(10px);
     }
-    .videira-app .btn:hover { background-color: var(--accent-hover); }
-    .videira-app .btn-outline { background-color: transparent; border: 1px solid var(--border); color: var(--text-primary); }
-    .videira-app .btn-outline:hover { background-color: var(--bg-hover); }
-    .videira-app .btn-icon { background: transparent; border: 1px solid var(--border); color: var(--text-primary); width: 36px; height: 36px; border-radius: 6px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.2s;}
-    .videira-app .btn-icon:hover { background: var(--bg-hover); }
-    .videira-app .btn-danger { color: var(--danger); border-color: transparent; }
-    .videira-app .btn-danger:hover { background: rgba(239, 68, 68, 0.1); }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 20px var(--accent-glow); }
+    .search-input::placeholder { color: #6b7280; font-weight: 300; }
 
-    /* CARDS E LISTAS */
-    .videira-app .list-item {
-      background: var(--bg-surface); padding: 16px 20px; border-radius: 8px; margin-bottom: 12px;
-      border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
-      display: flex; justify-content: space-between; align-items: center;
+    /* NAVEGAÇÃO EM PÍLULAS (Moderno) */
+    .pill-nav {
+      display: flex; gap: 10px; padding: 0 24px 16px 24px; overflow-x: auto; flex-shrink: 0; scrollbar-width: none;
     }
-    .videira-app .list-item:hover { border-color: #3f3f46; background: var(--bg-hover); }
-    .videira-app .item-main { font-weight: 600; font-size: 16px; display: block; margin-bottom: 4px; color: var(--text-primary); }
-    .videira-app .item-sub { font-size: 13px; color: var(--text-secondary); }
-
-    /* CABEÇALHOS DE SEÇÃO */
-    .videira-app .header-between { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;}
-    .videira-app h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-
-    /* EXIBIÇÃO DA CIFRA */
-    .videira-app .cifra-toolbar {
-      display: flex; justify-content: space-between; align-items: center;
-      background: var(--bg-surface); padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; border: 1px solid var(--border);
+    .pill-nav::-webkit-scrollbar { display: none; }
+    .nav-pill {
+      background: var(--bg-surface); border: 1px solid var(--border); padding: 10px 20px;
+      border-radius: 30px; font-size: 14px; font-weight: 500; color: var(--text-muted);
+      cursor: pointer; white-space: nowrap; transition: 0.3s;
     }
-    .videira-app .toolbar-group { display: flex; align-items: center; gap: 8px; }
-    .videira-app .toolbar-label { font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-right: 4px;}
-    .videira-app #cifra-display { font-family: 'Courier New', Courier, monospace; font-size: 16px; line-height: 1.6; white-space: pre-wrap; padding-bottom: 40px; }
+    .nav-pill:hover { background: rgba(255,255,255,0.05); }
+    .nav-pill.active { background: var(--text-main); color: var(--bg-base); border-color: var(--text-main); font-weight: 600; box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
+
+    /* ÁREA DE CONTEÚDO (Com scroll) */
+    .content-area {
+      flex: 1; overflow-y: auto; padding: 0 24px 100px 24px;
+    }
+    .content-area::-webkit-scrollbar { width: 4px; }
+    .content-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+    /* VIEW STATES */
+    .view-section { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    .view-section.active { display: block; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* GRIDS (Músicas Recentes e Repertórios) */
+    .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; margin-top: 16px; }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 16px; cursor: pointer; transition: 0.3s; backdrop-filter: blur(8px);
+      display: flex; flex-direction: column; justify-content: flex-end; min-height: 120px; position: relative; overflow: hidden;
+    }
+    .card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); background: rgba(31, 41, 55, 0.8); }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent), transparent); opacity: 0; transition: 0.3s; }
+    .card:hover::before { opacity: 1; }
+    .card-title { font-size: 16px; font-weight: 600; line-height: 1.2; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-sub { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+
+    /* LISTA DE RESULTADOS / MÚSICAS DA LISTA */
+    .list-row {
+      display: flex; justify-content: space-between; align-items: center; padding: 16px;
+      border-bottom: 1px solid var(--border); transition: 0.2s; cursor: pointer; border-radius: 8px;
+    }
+    .list-row:hover { background: rgba(255,255,255,0.03); padding-left: 20px; }
+    .row-info strong { display: block; font-size: 16px; font-weight: 500; }
+    .row-info span { font-size: 13px; color: var(--text-muted); }
     
-    /* MODAIS MODERNOS */
-    .videira-app .modal-backdrop {
+    /* BOTÕES GERAIS */
+    .btn { background: var(--text-main); color: var(--bg-base); border: none; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-family: 'Outfit'; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
+    .btn:hover { transform: scale(1.02); background: #e5e7eb; }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-icon-only { background: transparent; color: var(--text-muted); border: none; font-size: 20px; cursor: pointer; transition: 0.2s; padding: 8px; border-radius: 50%; }
+    .btn-icon-only:hover { background: rgba(255,255,255,0.1); color: var(--danger); }
+
+    /* VIEW CIFRA */
+    .cifra-header { margin-bottom: 30px; text-align: center; }
+    .cifra-header h2 { font-size: 32px; font-weight: 800; margin: 0 0 5px 0; }
+    .cifra-header p { font-size: 16px; color: var(--accent); font-weight: 500; margin: 0; }
+    #cifra-display { font-family: 'Courier New', monospace; font-size: 16px; line-height: 1.6; white-space: pre-wrap; padding-bottom: 80px; }
+
+    /* DOCK FLUTUANTE (CONTROLES DE CIFRA) */
+    .floating-dock {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 16px; border-radius: 40px; display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5); z-index: 100;
+    }
+    .dock-group { display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.3); border-radius: 30px; padding: 4px 8px; }
+    .dock-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin: 0 4px; letter-spacing: 1px;}
+    .dock-btn { background: transparent; border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-weight: 600; transition: 0.2s; display: flex; align-items: center; justify-content: center; font-family: 'Outfit';}
+    .dock-btn:hover { background: var(--accent); }
+
+    /* MODAIS (Bottom Sheets / Glass Panels) */
+    .glass-modal {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
-      z-index: 1000; display: none; align-items: center; justify-content: center; padding: 16px;
+      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+      z-index: 1000; display: none; align-items: flex-end; justify-content: center;
     }
-    .videira-app .modal-container {
-      background: var(--bg-app); border-radius: 12px; width: 100%; max-width: 480px;
-      border: 1px solid var(--border); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
-      display: flex; flex-direction: column; max-height: 90vh;
+    .modal-panel {
+      background: var(--bg-card); border-top: 1px solid var(--border); border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+      width: 100%; max-width: 600px; border-radius: 24px 24px 0 0; padding: 32px 24px;
+      animation: sheetUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
     }
-    .videira-app .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-    .videira-app .modal-header h3 { margin: 0; font-size: 18px; font-weight: 600; }
-    .videira-app .btn-close { background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer; line-height: 1;}
-    .videira-app .modal-body { padding: 24px; overflow-y: auto; }
-    .videira-app .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; background: var(--bg-surface); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;}
-
-    /* TAG HISTÓRICO */
-    .videira-app .badge { background: #27272a; color: #a1a1aa; font-size: 11px; padding: 4px 8px; border-radius: 4px; font-weight: 500;}
+    @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    
+    .modal-panel input, .modal-panel textarea {
+      width: 100%; padding: 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      color: white; border-radius: var(--radius-md); margin-bottom: 16px; font-family: 'Outfit'; outline: none;
+    }
+    .modal-panel input:focus { border-color: var(--accent); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .modal-header h3 { margin: 0; font-size: 20px; font-weight: 600; }
   </style>
 </head>
 <body>
 
 <div class="videira-app">
 
-  <div class="top-nav">
-    <div class="nav-item active" id="nav-busca" onclick="mudarAba('busca')">Pesquisar</div>
-    <div class="nav-item" id="nav-listas" onclick="mudarAba('listas')">Repertórios</div>
-    <div class="nav-item" id="nav-configs" onclick="mudarAba('configs')">Configurações</div>
-  </div>
+  <header class="v-header">
+    <h1 class="v-title">Acervo</h1>
+    <div class="search-wrapper">
+      <input type="text" id="main-search" class="search-input" placeholder="Qual música vamos tocar?" oninput="buscarNoSupabase()" autocomplete="off">
+    </div>
+  </header>
 
-  <div class="content-area">
+  <nav class="pill-nav">
+    <div class="nav-pill active" id="pill-recentes" onclick="mudarView('recentes')">Recentes</div>
+    <div class="nav-pill" id="pill-listas" onclick="mudarView('listas')">Repertórios</div>
+    <div class="nav-pill" id="pill-configs" onclick="mudarView('configs')">Importar</div>
+  </nav>
+
+  <main class="content-area">
     
-    <div id="aba-busca" class="tab-content active">
-      <div class="input-group">
-        <input type="text" id="busca-input" class="input-box" placeholder="Digite o nome da música ou artista..." oninput="buscarNoSupabase()" autocomplete="off">
-      </div>
+    <div id="view-recentes" class="view-section active">
+      <div id="busca-resultados"></div>
       
-      <div id="resultados-busca"></div>
-      
-      <div id="historico-busca" style="margin-top: 24px;">
-        <p style="color: var(--text-secondary); font-size: 14px; font-weight: 500; margin-bottom: 16px;">Acessadas Recentemente</p>
-        <div id="container-recentes"></div>
+      <div id="bloco-recentes">
+        <h3 style="font-size: 16px; color: var(--text-muted); font-weight: 400; margin-top: 0;">Últimas Acessadas</h3>
+        <div class="grid-cards" id="grid-recentes"></div>
       </div>
     </div>
 
-    <div id="aba-listas" class="tab-content">
-      <div class="header-between">
-        <h2>Meus Repertórios</h2>
-        <button class="btn" onclick="abrirModal('modal-nova-lista')">+ Nova Lista</button>
+    <div id="view-listas" class="view-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="margin:0; font-weight: 500;">Meus Repertórios</h3>
+        <button class="btn btn-primary" style="padding: 8px 16px; font-size: 12px;" onclick="abrirModal('modal-nova-lista')">+ Criar</button>
       </div>
-      <div id="container-listas-ativas">Carregando repertórios...</div>
+      <div class="grid-cards" id="grid-listas"></div>
     </div>
 
-    <div id="aba-ver-lista" class="tab-content">
-      <div style="margin-bottom: 24px;">
-        <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;" onclick="mudarAba('listas')">← Voltar</button>
+    <div id="view-ver-lista" class="view-section">
+      <div style="margin-bottom: 24px; display: flex; justify-content: space-between;">
+        <button class="btn" style="background: rgba(255,255,255,0.1); color: white;" onclick="mudarView('listas')">← Voltar</button>
+        <button class="btn" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);" onclick="excluirListaAtual()">Excluir Repertório</button>
       </div>
       
-      <div class="header-between" style="border-bottom: 1px solid var(--border); padding-bottom: 16px;">
-        <div>
-          <h2 id="vl-nome">Nome da Lista</h2>
-          <span id="vl-data" style="color: var(--text-secondary); font-size: 14px; margin-top: 4px; display: block;"></span>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-outline btn-danger" onclick="excluirListaAtual()">Excluir Lista</button>
-          <button class="btn" onclick="abrirModal('modal-busca-lista')">+ Add Música</button>
-        </div>
+      <div style="text-align: center; margin-bottom: 30px;">
+        <h2 id="vl-nome" style="font-size: 28px; margin: 0 0 5px 0;">Nome da Lista</h2>
+        <p id="vl-data" style="color: var(--accent); margin: 0; font-weight: 500;"></p>
       </div>
-      
-      <div id="vl-cifras" style="margin-top: 24px;">Carregando...</div>
+
+      <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+        <button class="btn btn-primary" onclick="abrirModal('modal-busca-lista')">+ Adicionar Música</button>
+      </div>
+
+      <div id="vl-cifras" style="border-top: 1px solid var(--border); padding-top: 16px;"></div>
     </div>
 
-    <div id="aba-configs" class="tab-content">
-      <div class="header-between">
-        <h2>Configurações do Acervo</h2>
-      </div>
+    <div id="view-configs" class="view-section">
+      <h3 style="font-weight: 500; margin-top: 0;">Cadastrar Cifra</h3>
       
-      <div class="list-item" style="flex-direction: column; align-items: flex-start; gap: 16px; cursor: default;">
-        <div>
-          <span class="item-main">Adicionar ao Acervo</span>
-          <span class="item-sub">Cadastre cifras manualmente ou importe links do CifraClub.</span>
-        </div>
-        <div style="display: flex; gap: 12px;">
-          <button class="btn btn-outline" onclick="abrirModal('modal-cifra-manual')">Cadastro Manual</button>
-          <button class="btn" onclick="abrirModal('modal-cifra-importar')">Importar CifraClub</button>
-        </div>
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px; margin-bottom: 20px;">
+        <h4 style="margin: 0 0 10px 0;">Mágica do CifraClub</h4>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Cole qualquer link do CifraClub. O sistema buscará a versão de impressão, mais limpa e direta.</p>
+        <button class="btn btn-primary" onclick="abrirModal('modal-cifra-importar')">Colar Link do CifraClub</button>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px;">
+        <h4 style="margin: 0 0 10px 0;">Modo Raiz</h4>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Digite ou cole o texto puro da sua cifra manualmente.</p>
+        <button class="btn" style="background: rgba(255,255,255,0.1); color: white;" onclick="abrirModal('modal-cifra-manual')">Cadastro Manual</button>
       </div>
     </div>
 
-    <div id="aba-cifra" class="tab-content">
-      <div class="header-between">
-        <button class="btn btn-outline" style="padding: 8px 16px; font-size: 13px;" onclick="voltarParaAnterior()">← Voltar</button>
-        <button class="btn" style="padding: 8px 16px; font-size: 13px;" onclick="abrirModal('modal-add-lista-rapida'); carregarListasNoModal();">Adicionar ao Repertório</button>
+    <div id="view-cifra" class="view-section">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <button class="btn" style="background: rgba(255,255,255,0.1); color: white; padding: 8px 16px; font-size: 12px;" onclick="voltarParaAnterior()">← Fechar</button>
+        <button class="btn btn-primary" style="padding: 8px 16px; font-size: 12px;" onclick="abrirModal('modal-add-lista-rapida'); carregarListasNoModal();">+ Repertório</button>
       </div>
-      
-      <h2 id="titulo-musica" style="margin-bottom: 4px;"></h2>
-      <p id="nome-artista-view" style="color: var(--text-secondary); margin-top: 0; margin-bottom: 24px; font-size: 15px;"></p>
 
-      <div class="cifra-toolbar">
-        <div class="toolbar-group">
-          <span class="toolbar-label">TOM</span>
-          <button class="btn-icon" onclick="mudarTom(-1)">-</button>
-          <button class="btn-icon" onclick="mudarTom(1)">+</button>
-        </div>
-        <div class="toolbar-group">
-          <span class="toolbar-label">FONTE</span>
-          <button class="btn-icon" onclick="mudarTamanhoFonte(-2)">A-</button>
-          <button class="btn-icon" onclick="mudarTamanhoFonte(2)">A+</button>
-        </div>
+      <div class="cifra-header">
+        <h2 id="titulo-musica"></h2>
+        <p id="nome-artista-view"></p>
       </div>
 
       <div id="cifra-display"></div>
     </div>
 
-  </div> <div id="modal-nova-lista" class="modal-backdrop">
-    <div class="modal-container">
-      <div class="modal-header">
-        <h3>Criar Repertório</h3>
-        <button class="btn-close" onclick="fecharModal('modal-nova-lista')">×</button>
-      </div>
-      <div class="modal-body">
-        <input type="text" id="nl-nome" class="input-box" placeholder="Nome (Ex: Culto da Vitória)" style="margin-bottom: 16px;">
-        <input type="date" id="nl-data" class="input-box">
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" onclick="fecharModal('modal-nova-lista')">Cancelar</button>
-        <button class="btn" onclick="criarLista()">Salvar</button>
-      </div>
+  </main>
+
+  <div id="dock-cifra" class="floating-dock" style="display: none;">
+    <div class="dock-group">
+      <button class="dock-btn" onclick="mudarTom(-1)">-</button>
+      <span class="dock-label">TOM</span>
+      <button class="dock-btn" onclick="mudarTom(1)">+</button>
+    </div>
+    <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+    <div class="dock-group">
+      <button class="dock-btn" onclick="mudarTamanhoFonte(-2)">A-</button>
+      <span class="dock-label">TXT</span>
+      <button class="dock-btn" onclick="mudarTamanhoFonte(2)">A+</button>
     </div>
   </div>
 
-  <div id="modal-busca-lista" class="modal-backdrop">
-    <div class="modal-container" style="height: 80vh;">
+  <div id="modal-nova-lista" class="glass-modal">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h3>Novo Repertório</h3>
+        <button class="btn-icon-only" onclick="fecharModal('modal-nova-lista')">✕</button>
+      </div>
+      <input type="text" id="nl-nome" placeholder="Nome do Evento (Ex: Culto de Jovens)">
+      <input type="date" id="nl-data">
+      <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="criarLista()">Criar Lista</button>
+    </div>
+  </div>
+
+  <div id="modal-busca-lista" class="glass-modal">
+    <div class="modal-panel" style="height: 80vh; display: flex; flex-direction: column;">
       <div class="modal-header">
         <h3>Adicionar Música</h3>
-        <button class="btn-close" onclick="fecharModal('modal-busca-lista')">×</button>
+        <button class="btn-icon-only" onclick="fecharModal('modal-busca-lista')">✕</button>
       </div>
-      <div class="modal-body" style="display: flex; flex-direction: column;">
-        <input type="text" id="busca-lista-input" class="input-box" placeholder="Busque a música..." oninput="buscarParaListaAtual()" style="margin-bottom: 16px; flex-shrink: 0;">
-        <div id="resultados-busca-lista" style="flex: 1; overflow-y: auto;"></div>
-      </div>
+      <input type="text" id="busca-lista-input" placeholder="Qual música adicionar?" oninput="buscarParaListaAtual()">
+      <div id="resultados-busca-lista" style="flex: 1; overflow-y: auto; margin-top: 16px;"></div>
     </div>
   </div>
 
-  <div id="modal-add-lista-rapida" class="modal-backdrop">
-    <div class="modal-container">
+  <div id="modal-add-lista-rapida" class="glass-modal">
+    <div class="modal-panel">
       <div class="modal-header">
-        <h3>Salvar no Repertório</h3>
-        <button class="btn-close" onclick="fecharModal('modal-add-lista-rapida')">×</button>
+        <h3>Salvar onde?</h3>
+        <button class="btn-icon-only" onclick="fecharModal('modal-add-lista-rapida')">✕</button>
       </div>
-      <div class="modal-body">
-        <div id="ml-opcoes">Carregando listas...</div>
-      </div>
+      <div id="ml-opcoes" style="max-height: 400px; overflow-y: auto;">Carregando...</div>
     </div>
   </div>
 
-  <div id="modal-cifra-manual" class="modal-backdrop">
-    <div class="modal-container" style="height: 90vh;">
+  <div id="modal-cifra-importar" class="glass-modal">
+    <div class="modal-panel">
       <div class="modal-header">
-        <h3>Cadastro Manual</h3>
-        <button class="btn-close" onclick="fecharModal('modal-cifra-manual')">×</button>
+        <h3>Mágica do CifraClub</h3>
+        <button class="btn-icon-only" onclick="fecharModal('modal-cifra-importar')">✕</button>
       </div>
-      <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
-        <input type="text" id="nc-musica" class="input-box" placeholder="Título da Música">
-        <input type="text" id="nc-artista" class="input-box" placeholder="Artista">
-        <textarea id="nc-conteudo" class="input-box" placeholder="Cole a cifra inteira aqui..." style="flex: 1; min-height: 250px; font-family: monospace; resize: none;"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" onclick="fecharModal('modal-cifra-manual')">Cancelar</button>
-        <button class="btn" onclick="salvarNovaCifra()">Salvar Cifra</button>
-      </div>
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Cole a URL normal da música, o sistema vai achar a versão de impressão sozinho e extrair os dados.</p>
+      <input type="url" id="cc-url" placeholder="Ex: https://www.cifraclub.com.br/isadora-pompeo/bencaos-que-nao-tem-fim/">
+      <div id="cc-status" style="color: var(--accent); font-size: 14px; margin-bottom: 16px; display: none;">Raspando a versão de impressão. Aguarde...</div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="importarCifraClub()">Extrair Dados</button>
     </div>
   </div>
 
-  <div id="modal-cifra-importar" class="modal-backdrop">
-    <div class="modal-container">
+  <div id="modal-cifra-manual" class="glass-modal">
+    <div class="modal-panel" style="height: 90vh; display: flex; flex-direction: column;">
       <div class="modal-header">
-        <h3>Importar do CifraClub</h3>
-        <button class="btn-close" onclick="fecharModal('modal-cifra-importar')">×</button>
+        <h3>Revisar / Cadastro Manual</h3>
+        <button class="btn-icon-only" onclick="fecharModal('modal-cifra-manual')">✕</button>
       </div>
-      <div class="modal-body">
-        <p style="font-size: 14px; color: var(--text-secondary); margin-top: 0; margin-bottom: 16px;">Cole o link completo da música. Nós preencheremos o título, artista e a letra automaticamente.</p>
-        <input type="url" id="cc-url" class="input-box" placeholder="Ex: https://www.cifraclub.com.br/.../">
-        <div id="cc-status" style="margin-top: 12px; font-size: 14px; color: var(--accent); display: none;">Aguarde, extraindo dados da web...</div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" onclick="fecharModal('modal-cifra-importar')">Cancelar</button>
-        <button class="btn" onclick="importarCifraClub()">Extrair Dados</button>
-      </div>
+      <input type="text" id="nc-musica" placeholder="Título">
+      <input type="text" id="nc-artista" placeholder="Artista">
+      <textarea id="nc-conteudo" placeholder="Cifra completa..." style="flex: 1; resize: none;"></textarea>
+      <button class="btn btn-primary" style="width: 100%;" onclick="salvarNovaCifra()">Salvar Cifra no Acervo</button>
     </div>
   </div>
 
 </div>
 
 <script>
-  // --- CREDENCIAIS ---
+  // --- SUPABASE CONFIG ---
   const supabaseUrl = 'https://ryvfogmfpjyamgqsltks.supabase.co/rest/v1';
   const supabaseKey = 'sb_publishable_nFMOC-fPkJnsmf5_noOTBg_tKV6Cr1q';
   const headers = { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' };
 
-  let abaAnterior = 'busca';
+  let abaAnterior = 'recentes';
   let cifraAtualId = null;
   let listaAtualId = null;
 
   document.addEventListener('DOMContentLoaded', () => { mostrarRecentes(); });
 
-  // --- CONTROLE DE ABAS E MODAIS ---
-  function mudarAba(abaId) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  // --- CONTROLE DE VIEWS (Estilo App) ---
+  function mudarView(viewId) {
+    // Esconde todas as views
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.getElementById(`view-${viewId}`).classList.add('active');
     
-    document.getElementById(`aba-${abaId}`).classList.add('active');
+    // Atualiza Pílulas se aplicável
+    document.querySelectorAll('.nav-pill').forEach(el => el.classList.remove('active'));
+    const pill = document.getElementById(`pill-${viewId}`);
+    if(pill) pill.classList.add('active');
+
+    // Mostra/esconde barra de pesquisa principal
+    const barraBusca = document.querySelector('.v-header');
+    if(viewId === 'cifra' || viewId === 'ver-lista') {
+      barraBusca.style.display = 'none';
+    } else {
+      barraBusca.style.display = 'block';
+    }
+
+    // Mostra/esconde Dock da cifra
+    document.getElementById('dock-cifra').style.display = (viewId === 'cifra') ? 'flex' : 'none';
+
+    // Ações Específicas
+    if(viewId === 'listas') carregarListas();
+    if(viewId !== 'cifra' && viewId !== 'ver-lista') abaAnterior = viewId;
     
-    // Nem toda aba tem botão no menu topo (ex: aba de ver lista e cifra)
-    const navBtn = document.getElementById(`nav-${abaId}`);
-    if(navBtn) navBtn.classList.add('active');
-    
-    if(abaId === 'listas') carregarListas();
-    if(abaId !== 'cifra' && abaId !== 'ver-lista') abaAnterior = abaId;
-    
-    // Reseta o scroll interno sempre que muda de aba
     document.querySelector('.content-area').scrollTop = 0;
   }
 
-  function voltarParaAnterior() { mudarAba(abaAnterior); }
+  function voltarParaAnterior() { mudarView(abaAnterior); }
 
   function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
   function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // --- HISTÓRICO DE BUSCAS RECENTES ---
+  // --- RECENTES ---
   function salvarHistoricoRecente(id, musica, artista) {
-    let recentes = JSON.parse(localStorage.getItem('videira_recentes') || '[]');
+    let recentes = JSON.parse(localStorage.getItem('vc_recentes') || '[]');
     recentes = recentes.filter(item => item.id !== id);
     recentes.unshift({ id, musica, artista });
-    if(recentes.length > 15) recentes.pop(); 
-    localStorage.setItem('videira_recentes', JSON.stringify(recentes));
+    if(recentes.length > 12) recentes.pop(); 
+    localStorage.setItem('vc_recentes', JSON.stringify(recentes));
   }
 
   function mostrarRecentes() {
-    const container = document.getElementById('container-recentes');
-    let recentes = JSON.parse(localStorage.getItem('videira_recentes') || '[]');
+    const container = document.getElementById('grid-recentes');
+    let recentes = JSON.parse(localStorage.getItem('vc_recentes') || '[]');
     container.innerHTML = '';
     
     if(recentes.length === 0) {
-      container.innerHTML = '<p style="color: var(--text-secondary); font-size: 14px;">Nada por enquanto.</p>';
+      container.innerHTML = '<p style="color: var(--text-muted); font-size: 14px;">Você ainda não abriu nenhuma cifra.</p>';
       return;
     }
 
     recentes.forEach(item => {
       const div = document.createElement('div');
-      div.className = 'list-item';
-      div.innerHTML = `<div><span class="item-main">${item.musica.replace(/-/g, ' ')}</span><span class="item-sub">${item.artista.replace(/-/g, ' ')}</span></div> <span class="badge">Recente</span>`;
+      div.className = 'card';
+      div.innerHTML = `<span class="card-title">${item.musica.replace(/-/g, ' ')}</span><span class="card-sub">${item.artista.replace(/-/g, ' ')}</span>`;
       div.onclick = () => carregarCifra(item.id, item.musica, item.artista);
       container.appendChild(div);
     });
   }
 
-  // --- BUSCA CORRIGIDA (Refinada apenas para Título e Artista) ---
+  // --- BUSCA MÁSTER (CIRÚRGICA) ---
   let timerBusca;
   async function buscarNoSupabase() {
-    const termo = document.getElementById('busca-input').value.trim();
-    const divRes = document.getElementById('resultados-busca');
-    const divHist = document.getElementById('historico-busca');
+    const termo = document.getElementById('main-search').value.trim();
+    const divRes = document.getElementById('busca-resultados');
+    const divRec = document.getElementById('bloco-recentes');
     
+    // Se digitou algo e não está na view recentes, força ir pra lá
+    if(!document.getElementById('view-recentes').classList.contains('active')) {
+      mudarView('recentes');
+    }
+
     if (termo === '') {
       divRes.innerHTML = '';
-      divHist.style.display = 'block';
+      divRec.style.display = 'block';
       mostrarRecentes();
       return;
     }
 
-    divHist.style.display = 'none';
+    divRec.style.display = 'none';
     if (termo.length < 2) return;
 
     clearTimeout(timerBusca);
     timerBusca = setTimeout(async () => {
-      divRes.innerHTML = '<p style="color:var(--text-secondary);">Buscando...</p>';
+      divRes.innerHTML = '<p style="color:var(--text-muted);">Procurando no acervo...</p>';
       
       try {
-        // Agora busca APENAS no título da música e no artista, ignorando a letra inteira.
         const termoBusca = encodeURIComponent(`*${termo.toLowerCase()}*`);
         const res = await fetch(`${supabaseUrl}/cifras?select=id,artista,musica&or=(musica.ilike.${termoBusca},artista.ilike.${termoBusca})&limit=50`, { headers });
         let dados = await res.json();
         
-        // ORDENAÇÃO INTELIGENTE: Dá prioridade para o termo exato ou que começa igual.
+        // ORDENAÇÃO: Se começar com a palavra exata, vai pro topo absoluto.
         const termoLower = termo.toLowerCase();
         dados.sort((a, b) => {
           const titleA = a.musica.toLowerCase();
@@ -418,16 +433,16 @@
           return 0; 
         });
 
-        divRes.innerHTML = '';
+        divRes.innerHTML = '<h3 style="font-size: 16px; color: var(--text-muted); font-weight: 400; margin-top: 0; margin-bottom: 16px;">Resultados para "'+termo+'"</h3>';
         if(dados.length === 0) {
-           divRes.innerHTML = '<p style="color:var(--text-secondary);">Nenhuma música encontrada com esse título.</p>';
+           divRes.innerHTML += '<p style="color:var(--text-muted);">Nenhuma música encontrada.</p>';
            return;
         }
 
         dados.forEach(item => {
           const div = document.createElement('div');
-          div.className = 'list-item';
-          div.innerHTML = `<div><span class="item-main">${item.musica.replace(/-/g, ' ')}</span><span class="item-sub">${item.artista.replace(/-/g, ' ')}</span></div>`;
+          div.className = 'list-row';
+          div.innerHTML = `<div class="row-info"><strong>${item.musica.replace(/-/g, ' ')}</strong><span>${item.artista.replace(/-/g, ' ')}</span></div>`;
           div.onclick = () => carregarCifra(item.id, item.musica, item.artista);
           divRes.appendChild(div);
         });
@@ -435,13 +450,13 @@
     }, 300);
   }
 
-  // --- CARREGAR E EXIBIR A CIFRA ---
+  // --- CARREGAR CIFRA ---
   async function carregarCifra(id, musicaStr = '', artistaStr = '') {
     cifraAtualId = id;
     if(musicaStr) salvarHistoricoRecente(id, musicaStr, artistaStr);
 
-    document.getElementById('cifra-display').innerHTML = '<p>Carregando cifra...</p>';
-    mudarAba('cifra');
+    document.getElementById('cifra-display').innerHTML = '<p style="text-align:center;">Lendo a partitura...</p>';
+    mudarView('cifra');
 
     try {
       const res = await fetch(`${supabaseUrl}/cifras?id=eq.${id}&select=artista,musica,conteudo_html`, { headers });
@@ -457,24 +472,26 @@
     } catch (e) { alert("Erro ao carregar a cifra."); voltarParaAnterior(); }
   }
 
-  // --- REPERTÓRIOS (LISTAS) ---
+  // --- REPERTÓRIOS ---
   async function carregarListas() {
-    const container = document.getElementById('container-listas-ativas');
-    container.innerHTML = '<p style="color:var(--text-secondary);">Buscando...</p>';
+    const container = document.getElementById('grid-listas');
+    container.innerHTML = '<p style="color:var(--text-muted);">Carregando álbuns...</p>';
     
     try {
       const res = await fetch(`${supabaseUrl}/listas?order=data_evento.desc,created_at.desc`, { headers });
       const listas = await res.json();
       
       container.innerHTML = '';
-      if(listas.length === 0) container.innerHTML = '<p style="color:var(--text-secondary);">Nenhuma lista criada.</p>';
+      if(listas.length === 0) container.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1;">Você ainda não criou nenhum repertório.</p>';
       
       listas.forEach(lista => {
         const div = document.createElement('div');
-        div.className = 'list-item';
-        let dataFormatada = lista.data_evento ? new Date(lista.data_evento).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'Sem data definida';
+        div.className = 'card';
+        // Estilo de capa de álbum com gradiente randomico suave
+        div.style.background = `linear-gradient(180deg, rgba(255,255,255,0) 40%, rgba(31,41,55,1) 100%), var(--bg-card)`;
         
-        div.innerHTML = `<div><span class="item-main">${lista.nome}</span><span class="item-sub">📅 ${dataFormatada}</span></div>`;
+        let dataFormatada = lista.data_evento ? new Date(lista.data_evento).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'Acervo';
+        div.innerHTML = `<span class="card-title">${lista.nome}</span><span class="card-sub">${dataFormatada}</span>`;
         div.onclick = () => abrirLista(lista.id, lista.nome, dataFormatada);
         container.appendChild(div);
       });
@@ -484,7 +501,7 @@
   async function criarLista() {
     const nome = document.getElementById('nl-nome').value;
     const data = document.getElementById('nl-data').value;
-    if(!nome) return alert('Por favor, dê um nome para a lista.');
+    if(!nome) return alert('Dê um nome para o evento.');
     
     try {
       const res = await fetch(`${supabaseUrl}/listas`, { method: 'POST', headers, body: JSON.stringify({ nome: nome, data_evento: data || null }) });
@@ -496,15 +513,14 @@
     } catch (e) { alert("Erro ao criar."); }
   }
 
-  // Visualizar lista na Aba normal (Sem modal)
   async function abrirLista(id, nome, dataStr) {
     listaAtualId = id;
     document.getElementById('vl-nome').innerText = nome;
     document.getElementById('vl-data').innerText = dataStr;
     
     const container = document.getElementById('vl-cifras');
-    container.innerHTML = '<p style="color:var(--text-secondary);">Carregando músicas...</p>';
-    mudarAba('ver-lista');
+    container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Buscando as músicas...</p>';
+    mudarView('ver-lista');
     
     try {
       const res = await fetch(`${supabaseUrl}/lista_cifras?lista_id=eq.${id}&select=id,cifras(id,musica,artista)`, { headers });
@@ -512,17 +528,22 @@
       
       container.innerHTML = '';
       if(itens.length === 0) {
-        container.innerHTML = '<div style="background:var(--bg-surface); padding: 24px; border-radius: 8px; text-align: center; border: 1px dashed var(--border);"><p style="color:var(--text-secondary); margin-bottom: 16px;">Lista vazia.</p><button class="btn btn-outline" onclick="abrirModal(\'modal-busca-lista\')">+ Pesquisar e Adicionar</button></div>';
+        container.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding: 40px 0;">Repertório vazio.</p>';
       }
       
-      itens.forEach(item => {
+      itens.forEach((item, index) => {
         const div = document.createElement('div');
-        div.className = 'list-item';
-        div.innerHTML = `<div style="flex:1;"><span class="item-main">${item.cifras.musica.replace(/-/g, ' ')}</span><span class="item-sub">${item.cifras.artista.replace(/-/g, ' ')}</span></div>
-                         <button class="btn-icon btn-danger" style="border:none;" onclick="removerDaLista('${item.id}', event)">✕</button>`;
+        div.className = 'list-row';
+        div.innerHTML = `
+          <div class="row-info" style="display:flex; align-items:center; gap: 16px;">
+            <span style="color:var(--text-muted); font-size: 16px; font-weight:600; width: 20px;">${index+1}</span>
+            <div><strong>${item.cifras.musica.replace(/-/g, ' ')}</strong><span>${item.cifras.artista.replace(/-/g, ' ')}</span></div>
+          </div>
+          <button class="btn-icon-only" onclick="removerDaLista('${item.id}', event)">✕</button>
+        `;
         div.onclick = (e) => { 
           if(e.target.tagName !== 'BUTTON') {
-             abaAnterior = 'ver-lista'; // Para o botão voltar da cifra funcionar direito
+             abaAnterior = 'ver-lista'; 
              carregarCifra(item.cifras.id, item.cifras.musica, item.cifras.artista); 
           }
         };
@@ -533,7 +554,7 @@
 
   async function removerDaLista(relacaoId, event) {
     event.stopPropagation();
-    if(!confirm("Remover da lista?")) return;
+    if(!confirm("Tirar música do repertório?")) return;
     try {
       await fetch(`${supabaseUrl}/lista_cifras?id=eq.${relacaoId}`, { method: 'DELETE', headers });
       abrirLista(listaAtualId, document.getElementById('vl-nome').innerText, document.getElementById('vl-data').innerText);
@@ -541,15 +562,15 @@
   }
 
   async function excluirListaAtual() {
-    if(!confirm("Excluir o repertório inteiro? As músicas continuarão no banco de dados.")) return;
+    if(!confirm("Excluir o repertório inteiro? As cifras continuarão salvas no sistema global.")) return;
     try {
       await fetch(`${supabaseUrl}/lista_cifras?lista_id=eq.${listaAtualId}`, { method: 'DELETE', headers });
       await fetch(`${supabaseUrl}/listas?id=eq.${listaAtualId}`, { method: 'DELETE', headers });
-      mudarAba('listas');
+      mudarView('listas');
     } catch(e) { alert("Erro."); }
   }
 
-  // --- ADICIONAR MÚSICA NA LISTA (MODAL) ---
+  // --- MODAL: BUSCA PRA ADD NA LISTA ---
   let timerBuscaLista;
   async function buscarParaListaAtual() {
     const termo = document.getElementById('busca-lista-input').value.trim();
@@ -558,7 +579,7 @@
 
     clearTimeout(timerBuscaLista);
     timerBuscaLista = setTimeout(async () => {
-      divRes.innerHTML = '<p style="color:var(--text-secondary);">Buscando...</p>';
+      divRes.innerHTML = '<p style="color:var(--text-muted);">Buscando...</p>';
       const termoBusca = encodeURIComponent(`*${termo.toLowerCase()}*`);
       try {
         const res = await fetch(`${supabaseUrl}/cifras?select=id,artista,musica&or=(musica.ilike.${termoBusca},artista.ilike.${termoBusca})&limit=15`, { headers });
@@ -567,8 +588,11 @@
         divRes.innerHTML = '';
         dados.forEach(item => {
           const div = document.createElement('div');
-          div.className = 'list-item';
-          div.innerHTML = `<div style="flex:1;"><span class="item-main">${item.musica.replace(/-/g, ' ')}</span><span class="item-sub">${item.artista.replace(/-/g, ' ')}</span></div> <button class="btn" style="padding: 8px 12px; font-size:12px;">Add</button>`;
+          div.className = 'list-row';
+          div.innerHTML = `
+            <div class="row-info"><strong>${item.musica.replace(/-/g, ' ')}</strong><span>${item.artista.replace(/-/g, ' ')}</span></div> 
+            <button class="btn" style="background:var(--bg-surface); color:white; padding: 6px 12px; font-size:12px;">+ Add</button>
+          `;
           div.onclick = () => salvarCifraNestaLista(item.id);
           divRes.appendChild(div);
         });
@@ -586,20 +610,21 @@
     } catch(e) { alert("Erro ao adicionar."); }
   }
 
+  // --- MODAL: ADD RÁPIDO NA CIFRA ABERTA ---
   async function carregarListasNoModal() {
     const container = document.getElementById('ml-opcoes');
-    container.innerHTML = '<p style="color:var(--text-secondary);">Buscando repertórios...</p>';
+    container.innerHTML = '<p style="color:var(--text-muted);">Buscando repertórios...</p>';
     
     try {
       const res = await fetch(`${supabaseUrl}/listas?order=data_evento.desc,created_at.desc`, { headers });
       const listas = await res.json();
       container.innerHTML = '';
-      if(listas.length === 0) container.innerHTML = '<p>Crie uma lista primeiro.</p>';
+      if(listas.length === 0) container.innerHTML = '<p>Nenhum repertório criado ainda.</p>';
       
       listas.forEach(l => {
         const div = document.createElement('div');
-        div.className = 'list-item';
-        div.innerHTML = `<span class="item-main" style="margin:0;">${l.nome}</span>`;
+        div.className = 'list-row';
+        div.innerHTML = `<div class="row-info"><strong>${l.nome}</strong></div>`;
         div.onclick = async () => {
           try {
             await fetch(`${supabaseUrl}/lista_cifras`, { method: 'POST', headers, body: JSON.stringify({ lista_id: l.id, cifra_id: cifraAtualId }) });
@@ -612,7 +637,7 @@
     } catch (e) { container.innerHTML = 'Erro.'; }
   }
 
-  // --- FERRAMENTAS (Tom e Fonte) ---
+  // --- CONTROLES DA DOCA (TOM E FONTE) ---
   const escala = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
   const conversorBemol = {'Db': 'C#', 'Eb': 'D#', 'Gb': 'F#', 'Ab': 'G#', 'Bb': 'A#'};
   let tamanhoFonteAtual = 16;
@@ -637,33 +662,40 @@
     });
   }
 
-  // --- CADASTRO MANUAL & CIFRACLUB ---
+  // --- SALVAR CIFRA ---
   async function salvarNovaCifra() {
     const artista = document.getElementById('nc-artista').value.trim();
     const musica = document.getElementById('nc-musica').value.trim();
     const conteudo = document.getElementById('nc-conteudo').value;
     if (!artista || !musica || !conteudo) return alert("Preencha todos os campos!");
     
-    // A coluna busca não é mais tão crítica na pesquisa, mas guardamos caso mude no futuro
     const payload = { artista, musica, busca: `${artista} ${musica}`.toLowerCase(), conteudo_html: conteudo };
     try {
       const res = await fetch(`${supabaseUrl}/cifras`, { method: 'POST', headers, body: JSON.stringify(payload) });
       if(res.ok) {
         document.getElementById('nc-artista').value = ''; document.getElementById('nc-musica').value = ''; document.getElementById('nc-conteudo').value = '';
         fecharModal('modal-cifra-manual');
-        mudarAba('busca');
+        mudarView('recentes');
       } else { alert("Erro ao salvar."); }
     } catch(e) { alert("Erro."); }
   }
 
+  // --- IMPORTAÇÃO INTELIGENTE DO CIFRACLUB (IMPRIMIR) ---
   async function importarCifraClub() {
-    const urlInput = document.getElementById('cc-url').value.trim();
+    let urlInput = document.getElementById('cc-url').value.trim();
     if(!urlInput.includes("cifraclub.com.br")) return alert("Cole um link válido do CifraClub.");
+
+    // Tratamento Inteligente da URL: Se não for a página de imprimir, a gente forja ela.
+    if(!urlInput.endsWith('/')) urlInput += '/';
+    if(!urlInput.includes('imprimir.html')) {
+      urlInput += 'imprimir.html';
+    }
 
     const statusDiv = document.getElementById('cc-status');
     statusDiv.style.display = 'block';
     
     try {
+      // Proxy para contornar bloqueios do navegador
       const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(urlInput)}`;
       const response = await fetch(proxyUrl);
       const data = await response.json();
@@ -671,18 +703,20 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(data.contents, "text/html");
 
-      const tituloEl = doc.querySelector('.t1');
-      const artistaEl = doc.querySelector('.t3');
+      // Na página imprimir.html as tags mudam levemente, é bem mais limpo.
+      // O titulo geralmente é <h1> ou <h1 class="t1"> e artista <h2>
+      const tituloEl = doc.querySelector('h1.t1') || doc.querySelector('h1');
+      const artistaEl = doc.querySelector('h2.t3') || doc.querySelector('h2');
       const cifraEl = doc.querySelector('pre'); 
 
-      if(!cifraEl) throw new Error("Cifra não encontrada no HTML retornado.");
+      if(!cifraEl) throw new Error("Cifra não encontrada no HTML de impressão.");
 
       document.getElementById('nc-musica').value = tituloEl ? tituloEl.innerText.trim() : "";
       document.getElementById('nc-artista').value = artistaEl ? artistaEl.innerText.trim() : "";
       document.getElementById('nc-conteudo').value = cifraEl.innerText;
 
       fecharModal('modal-cifra-importar');
-      abrirModal('modal-cifra-manual'); 
+      abrirModal('modal-cifra-manual'); // Mostra no painel manual pra revisão final!
       document.getElementById('cc-url').value = '';
 
     } catch(error) {
